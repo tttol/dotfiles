@@ -1,2 +1,2 @@
-# kabigon
-My setting files
+# dotfiles
+
