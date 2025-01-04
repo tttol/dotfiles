@@ -14,6 +14,7 @@ set laststatus=2 " ステータスラインを常に表示
 
 " keybindings
 nnoremap e $
+vnoremap e $
 if has("gui_macvim")
     " Commandキーを使用可能にする
     " for MacVim 
@@ -23,7 +24,7 @@ else
 endif
 
 set hlsearch " 検索時にマッチ箇所をハイライト
-set clipboard=unnamedplus " OSのクリップボードと同期
+" set clipboard=unnamedplus " OSのクリップボードと同期
 
 " モードに応じてステータスラインの色を変更
 function! SetStatuslineColor()
