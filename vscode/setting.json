@@ -16,11 +16,11 @@
     // "lldb.suppressUpdateNotifications": true,
     "javascript.updateImportsOnFileMove.enabled": "always",
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     // "npm.keybindingsChangedWarningShown": true,
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "update.showReleaseNotes": false,
     "[html]": {
@@ -64,7 +64,7 @@
         "statusBar.debuggingForeground": "#fff"
     },
     "files.autoSave": "afterDelay",
-    "editor.wordWrap": "off",
+    "editor.wordWrap": "on",
     "github.copilot.chat.localeOverride": "ja",
     "boot-java.change-detection.on": true,
     // If not specified searches for 'rubocop' executable available on PATH (default and recommended)
@@ -80,4 +80,8 @@
 
     // default true
     "ruby.rubocop.onSave": true,
+    "vim.vimrc.enable": true,
+    "vim.vimrc.path": "~/.vimrc",
+    "editor.tabSize": 2,
+    "security.workspace.trust.untrustedFiles": "open",
 }
