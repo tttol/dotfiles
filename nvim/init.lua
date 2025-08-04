@@ -1,23 +1,23 @@
 require("config.lazy")
-
--- Global settings
-vim.opt.encoding = "utf-8"
-vim.opt.backup = false
-vim.opt.swapfile = false
-vim.opt.autoread = true    -- Automatically reload if file changes outside Neovim
-vim.opt.hidden = true      -- Allow opening other files even if buffer is modified
-vim.opt.showcmd = true     -- Show input commands in status line
-vim.opt.background = "dark"
-vim.opt.guifont = "Menlo-Regular:h13" -- Font setting
-vim.opt.number = true      -- Show line numbers
-vim.opt.cursorline = true  -- Highlight current line
-vim.opt.laststatus = 2     -- Always show status line
-vim.opt.hlsearch = true    -- Highlight search matches
 vim.opt.clipboard = "unnamedplus" -- Sync with OS clipboard
+vim.opt.number = true      -- Show line numbers
+vim.opt.encoding = "utf-8"
+
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
+-- Colorscheme
+-- vim.cmd.colorscheme("unokai")
+vim.cmd.colorscheme("habamax")
 
 -- Keybindings
 vim.api.nvim_set_keymap('n', 'e', '$', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', 'e', '$', { noremap = true, silent = true })
-
--- Set line number color to gray
-vim.api.nvim_set_hl(0, "LineNr", { fg = "gray"})
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', 'ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', 'fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', 'fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', 'fh', builtin.help_tags, { desc = 'Telescope help tags' })
