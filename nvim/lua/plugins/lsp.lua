@@ -18,7 +18,7 @@ return {
     end,
   },
 
-  -- Mason-LSPConfig（MasonとLSPConfigの橋渡し）
+  -- Mason-LSPConfig (Bridge between Mason and LSPConfig)
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = {
@@ -28,21 +28,22 @@ return {
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "ts_ls",           -- TypeScript/JavaScript (旧tsserver)
+          "ts_ls",           -- TypeScript/JavaScript (formerly tsserver)
           "eslint",          -- ESLint
           "html",            -- HTML
           "cssls",           -- CSS/SCSS/Less
           "tailwindcss",     -- Tailwind CSS
           "jsonls",          -- JSON
-          "pyright",         -- Pythonの型チェック
+          "pyright",         -- Python type checking
           "lua_ls",          -- Lua
           "yamlls",          -- YAML
           "dockerls",        -- Dockerfile
           "bashls",          -- Bash
           "marksman",        -- Markdown
+          "jdtls",           -- Eclipse JDT Language Server for Java
         },
         
-        -- インストールされたLSPを自動的に有効化（v2.0以降のデフォルト）
+        -- Automatically enable installed LSPs (default in v2.0+)
         automatic_enable = true,
       })
     end,
@@ -52,18 +53,18 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- LSP進捗表示
+      -- LSP progress display
       { "j-hui/fidget.nvim", opts = {} },
-      -- 追加のLua設定（Neovim API補完）
+      -- Additional Lua configuration (Neovim API completion)
       { "folke/neodev.nvim", opts = {} },
-      -- 補完エンジンとの連携
+      -- Integration with completion engine
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       local lspconfig = require("lspconfig")
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
       
-      -- LSPサーバーの共通設定
+      -- Common configuration for LSP servers
       local capabilities = cmp_nvim_lsp.default_capabilities()
       
       local on_attach = function(client, bufnr)
@@ -71,52 +72,52 @@ return {
         local keymap = vim.keymap.set
         
         -- definition, reference
-        keymap("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "定義へジャンプ" }))
-        keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "宣言へジャンプ" }))
-        keymap("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "実装へジャンプ" }))
-        keymap("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "参照一覧" }))
-        keymap("n", "gt", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "型定義へジャンプ" }))
+        keymap("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Jump to definition" }))
+        keymap("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Jump to declaration" }))
+        keymap("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Jump to implementation" }))
+        keymap("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Show references" }))
+        keymap("n", "gt", vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Jump to type definition" }))
         
         -- document, help
-        keymap("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "ホバー情報" }))
-        keymap("n", "<C-k>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "シグネチャヘルプ" }))
+        keymap("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Show hover information" }))
+        keymap("n", "<C-k>", vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Show signature help" }))
         
         -- refactoring
-        keymap("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "リネーム" }))
-        keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "コードアクション" }))
+        keymap("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
+        keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
         
         -- format
         keymap("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
-        end, vim.tbl_extend("force", opts, { desc = "フォーマット" }))
+        end, vim.tbl_extend("force", opts, { desc = "Format code" }))
         
-        -- doctor
-        keymap("n", "<leader>e", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "診断を表示" }))
-        keymap("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", opts, { desc = "前の診断へ" }))
-        keymap("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "次の診断へ" }))
-        keymap("n", "<leader>q", vim.diagnostic.setloclist, vim.tbl_extend("force", opts, { desc = "診断リスト" }))
+        -- diagnostics
+        keymap("n", "<leader>e", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Show diagnostics" }))
+        keymap("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", opts, { desc = "Go to previous diagnostic" }))
+        keymap("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", opts, { desc = "Go to next diagnostic" }))
+        keymap("n", "<leader>q", vim.diagnostic.setloclist, vim.tbl_extend("force", opts, { desc = "Show diagnostic list" }))
         
         -- workspace
-        keymap("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, vim.tbl_extend("force", opts, { desc = "ワークスペースフォルダ追加" }))
-        keymap("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, vim.tbl_extend("force", opts, { desc = "ワークスペースフォルダ削除" }))
+        keymap("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, vim.tbl_extend("force", opts, { desc = "Add workspace folder" }))
+        keymap("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, vim.tbl_extend("force", opts, { desc = "Remove workspace folder" }))
         keymap("n", "<leader>wl", function()
           print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, vim.tbl_extend("force", opts, { desc = "ワークスペースフォルダ一覧" }))
+        end, vim.tbl_extend("force", opts, { desc = "List workspace folders" }))
         
-        -- 特定のLSPの機能を無効化する例
+        -- Example of disabling specific LSP features
         if client.name == "ts_ls" then
           client.server_capabilities.documentFormattingProvider = false
         end
       end
       
-      -- 診断の表示設定
+      -- Diagnostic display configuration
       vim.diagnostic.config({
         virtual_text = {
-          prefix = "●", -- アイコン
-          source = "if_many", -- 複数のソースがある場合のみ表示
+          prefix = "●", -- Icon
+          source = "if_many", -- Show source only when multiple sources exist
         },
         float = {
-          source = "always", -- 常にソースを表示
+          source = "always", -- Always show source
           border = "rounded",
         },
         signs = true,
@@ -125,14 +126,14 @@ return {
         severity_sort = true,
       })
       
-      -- 診断のサインをカスタマイズ
+      -- Customize diagnostic signs
       local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
       
-      -- 各LSPサーバーの個別設定
+      -- Individual configuration for each LSP server
       
       -- TypeScript/JavaScript
       lspconfig.ts_ls.setup({
@@ -150,7 +151,7 @@ return {
               includeInlayEnumMemberValueHints = true,
             },
             format = {
-              enable = false, -- prettierを使うため無効化
+              enable = false, -- Disabled to use prettier
             },
           },
           javascript = {
@@ -171,7 +172,7 @@ return {
       lspconfig.eslint.setup({
         on_attach = function(client, bufnr)
           on_attach(client, bufnr)
-          -- 保存時に自動修正
+          -- Auto-fix on save
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
             command = "EslintFixAll",
@@ -190,7 +191,7 @@ return {
               version = "LuaJIT",
             },
             diagnostics = {
-              globals = { "vim" }, -- vimをグローバル変数として認識
+              globals = { "vim" }, -- Recognize vim as global variable
             },
             workspace = {
               library = vim.api.nvim_get_runtime_file("", true),
@@ -255,13 +256,57 @@ return {
         },
       })
       
-      -- その他のLSPサーバーはデフォルト設定で自動有効化
-      -- Mason-LSPConfigのautomatic_enable = trueにより、
-      -- ensure_installedにリストされたサーバーは自動的にセットアップされる
+      -- Java (jdtls)
+      lspconfig.jdtls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+          java = {
+            configuration = {
+              runtimes = {
+                {
+                  name = "JavaSE-17",
+                  path = "/usr/local/opt/openjdk@17",
+                },
+                {
+                  name = "JavaSE-11",
+                  path = "/usr/local/opt/openjdk@11",
+                },
+              },
+            },
+            project = {
+              sourcePaths = {},
+              outputPath = "./.metadata/.plugins/org.eclipse.core.resources/.projects/",
+            },
+            compile = {
+              nullAnalysis = {
+                mode = "automatic",
+              },
+            },
+            completion = {
+              favoriteStaticMembers = {
+                "org.junit.jupiter.api.Assertions.*",
+                "org.junit.Assert.*",
+                "org.mockito.Mockito.*",
+              },
+            },
+            contentProvider = {
+              preferred = "fernflower",
+            },
+            format = {
+              enabled = true,
+            },
+          },
+        },
+      })
+      
+      -- Other LSP servers are automatically enabled with default settings
+      -- With Mason-LSPConfig's automatic_enable = true,
+      -- servers listed in ensure_installed are automatically set up
     end,
   },
 
-  -- 補完エンジン
+  -- Completion engine
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
@@ -273,14 +318,14 @@ return {
       "saadparwaiz1/cmp_luasnip",
       "L3MON4D3/LuaSnip",
       "rafamadriz/friendly-snippets",
-      "onsails/lspkind.nvim", -- アイコン表示
+      "onsails/lspkind.nvim", -- Icon display
     },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
       local lspkind = require("lspkind")
       
-      -- friendly-snippetsを読み込み
+      -- Load friendly-snippets
       require("luasnip.loaders.from_vscode").lazy_load()
       
       cmp.setup({
@@ -344,7 +389,7 @@ return {
     end,
   },
 
-  -- JSON Schemas（jsonlsで使用）
+  -- JSON Schemas (used by jsonls)
   {
     "b0o/schemastore.nvim",
     lazy = true,
