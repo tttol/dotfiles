@@ -14,6 +14,15 @@ return {
   },
   config = function()
     require("nvim-tree").setup {
+        git = {
+            ignore = false
+        },
+        -- focus the file when opening a file
+        update_focused_file = {
+            enable = true,
+            update_cwd = true,
+            ignore_list = {},
+        },
     }
   end,
 }

@@ -119,6 +119,11 @@ return {
         float = {
           source = "always", -- Always show source
           border = "rounded",
+          width = 120,
+          height = 30,
+          wrap = true,
+          max_width = 120,
+          max_height = 30,
         },
         signs = true,
         underline = true,
@@ -256,53 +261,17 @@ return {
         },
       })
       
-      -- Java (jdtls)
-      lspconfig.jdtls.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        settings = {
-          java = {
-            configuration = {
-              runtimes = {
-                {
-                  name = "JavaSE-17",
-                  path = "/usr/local/opt/openjdk@17",
-                },
-                {
-                  name = "JavaSE-11",
-                  path = "/usr/local/opt/openjdk@11",
-                },
-              },
-            },
-            project = {
-              sourcePaths = {},
-              outputPath = "./.metadata/.plugins/org.eclipse.core.resources/.projects/",
-            },
-            compile = {
-              nullAnalysis = {
-                mode = "automatic",
-              },
-            },
-            completion = {
-              favoriteStaticMembers = {
-                "org.junit.jupiter.api.Assertions.*",
-                "org.junit.Assert.*",
-                "org.mockito.Mockito.*",
-              },
-            },
-            contentProvider = {
-              preferred = "fernflower",
-            },
-            format = {
-              enabled = true,
-            },
-          },
-        },
+      -- Java (jdtls) - use custom on_attach
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('jdtls-lsp-attach', { clear = true }),
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.name == 'jdtls' then
+            on_attach(client, args.buf)
+          end
+        end,
       })
-      
-      -- Other LSP servers are automatically enabled with default settings
-      -- With Mason-LSPConfig's automatic_enable = true,
-      -- servers listed in ensure_installed are automatically set up
+      vim.lsp.enable('jdtls')
     end,
   },
 
