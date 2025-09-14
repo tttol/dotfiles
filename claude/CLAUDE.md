@@ -1,57 +1,41 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Basic Guidelines
+# Basic
 - Always output answer in Japanese, but output source-code comment in English. If you are asked something in English, you must answer in Japanese, no matter what.
 - Do not use trailing spaces in source code.
 - Do not apply empty lines, trailing spaces and tab characters in source code.
+- Always ne conscious about `Don't Repeat Yourself`(DRY) 
+- Always be conscious about `Keep It Simple Stupid!`(KISS) 
+- Always make the implementation simple. You should not install unnecessary additional libraries or write unnecessarily complex conditional logic. First, consider whether you can achieve the requirements using only the standard library, and only consider installing additional libraries when it's genuinely difficult to accomplish with the standard library alone.
 
-## Repository Structure
+# Test Code
+- Follow the AAA pattern: Arrange, Act, and Assert. These represent the three phases of a test.
+- Arrange: Set up your test data, mocks, expected values, and everything else you need.
+- Act: Execute the method you're testing. Keep this to a single line - each test should focus on one method only. Don't test multiple methods in a single test.
+- Assert: Verify that you got the expected results.
+Here is a sample of AAA pattern.
+```javascript
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+}
 
-This is a personal dotfiles repository containing configuration files for various development tools:
+describe('Calculator', () => {
+  describe('add', () => {
+    test('Add two numbers', () => {
+      // Arrange
+      const calculator = new Calculator();
+      const num1 = 5;
+      const num2 = 3;
+      const expected = 8;
+      
+      // Act
+      const result = calculator.add(num1, num2);
+      
+      // Assert
+      expect(result).toBe(expected);
+    });
+  });
+});
 
-- `nvim/` - Neovim configuration with Lua
-- `vscode/` - Visual Studio Code settings and preferences
-- `google-ja-input/` - Google Japanese Input custom keymap
-- `vim/` - Vim configuration (currently empty)
-- `shrc/` - Shell configuration (currently empty)
-
-## Neovim Configuration
-
-The Neovim setup (`nvim/init.lua`) includes:
-- Lazy.nvim plugin manager (config in `config.lazy`)
-- Telescope for fuzzy finding
-- Custom key mappings:
-  - `e` mapped to `$` (end of line) in normal and visual modes
-  - `ff` for Telescope find files
-  - `fg` for Telescope live grep
-  - `fb` for Telescope buffers
-  - `fh` for Telescope help tags
-- Clipboard integration with OS
-- Line numbers enabled
-- UTF-8 encoding
-- Disabled netrw in favor of other file explorers
-- Color scheme: habamax
-
-## VSCode Configuration
-
-Key settings in `vscode/setting.json`:
-- Vim extension with custom status bar colors for different modes
-- Default formatters for various file types
-- Auto-save enabled
-- Word wrap enabled
-- Git auto-fetch and smart commit
-- Java development with Amazon Corretto 21
-- PlantUML server integration
-- Copilot chat in Japanese
-- Tab size set to 2 spaces
-- Ruby/RuboCop integration
-
-## Google Japanese Input
-
-Custom keymap file (`google-ja-input/keymap.txt`) provides:
-- Emacs-style cursor movement in composition mode (Ctrl+a, Ctrl+e, etc.)
-- Additional conversion shortcuts
-- Escape key to cancel and turn off IME
-- Enhanced navigation and text manipulation during input
+```
+- Don't change a method's visibility just to make tests pass (for example, changing private to public).
