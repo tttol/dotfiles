@@ -20,9 +20,18 @@ return {
         -- focus the file when opening a file
         update_focused_file = {
             enable = true,
-            update_cwd = true,
+            update_cwd = false,
             ignore_list = {},
         },
+        on_attach = function(bufnr)
+            local api = require('nvim-tree.api')
+            
+            -- Default mappings
+            api.config.mappings.default_on_attach(bufnr)
+            
+            -- Remove q mapping
+            vim.keymap.del('n', 'q', { buffer = bufnr })
+        end
     }
   end,
 }

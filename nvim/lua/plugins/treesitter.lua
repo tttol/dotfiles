@@ -6,7 +6,7 @@ return {
     end,
     main = 'nvim-treesitter.configs',
      opts = {
-         ensure_installed = { "markdown", "markdown_inline", "html", "typescript", "javascript", "java", "css", "lua", "python", "go", "yaml", "toml", "json" },
+         ensure_installed = { "markdown", "markdown_inline", "html", "typescript", "javascript", "java", "css", "lua", "python", "go", "yaml", "toml", "json", "rust" },
          auto_install = true,
          highlight = {
              enable = true,

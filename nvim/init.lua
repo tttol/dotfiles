@@ -44,6 +44,8 @@ vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = 
 
 -- Keybindings
 -- vim.g.mapleader = " "
+vim.api.nvim_set_keymap('n', '<C-u>', '10<C-u>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-d>', '10<C-d>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'e', '$', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', 'e', '$', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-[>', '<C-o>', { noremap = true, silent = true })
@@ -54,15 +56,15 @@ vim.api.nvim_set_keymap('n', '<leader>wq', ':wq<CR>', { noremap = true, silent =
 vim.api.nvim_set_keymap('n', '<leader>q', ':qa<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bd', ':bd<CR>', { noremap = true, silent = true })
 
--- Auto closing tag for HTML
-vim.api.nvim_create_augroup("MyXML", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    group = "MyXML",
-    pattern = "html",
-    callback = function()
-        vim.keymap.set("i", "</", "</<C-x><C-o><ESC>F>a<CR><ESC>O", { buffer = true })
-    end,
-})
+-- -- Auto closing tag for HTML
+-- vim.api.nvim_create_augroup("MyXML", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--     group = "MyXML",
+--     pattern = "html",
+--     callback = function()
+--         vim.keymap.set("i", "</", "</<C-x><C-o><ESC>F>a<CR><ESC>O", { buffer = true })
+--     end,
+-- })
 
 -- lualine setup
 require('lualine').setup {

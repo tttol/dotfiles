@@ -1,6 +1,72 @@
 -- Set completion options for all LSPs
 vim.cmd [[set completeopt+=menuone,noselect,popup]]
 
+-- LSP progress handler
+local progress = {}
+vim.api.nvim_create_autocmd('LspProgress', {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if not client then return end
+        
+        local token = args.data.params.token
+        local value = args.data.params.value
+        
+        if value.kind == 'begin' then
+            progress[token] = {
+                title = value.title,
+                message = value.message or '',
+                percentage = value.percentage or 0,
+                client_name = client.name
+            }
+        elseif value.kind == 'report' then
+            if progress[token] then
+                progress[token].message = value.message or progress[token].message
+                progress[token].percentage = value.percentage or progress[token].percentage
+            end
+        elseif value.kind == 'end' then
+            progress[token] = nil
+        end
+        
+        -- Update statusline or show notification
+        local messages = {}
+        for _, p in pairs(progress) do
+            local msg = string.format("[%s] %s", p.client_name, p.title)
+            if p.message ~= '' then
+                msg = msg .. ': ' .. p.message
+            end
+            if p.percentage then
+                msg = msg .. string.format(' (%d%%)', p.percentage)
+            end
+            table.insert(messages, msg)
+        end
+        
+        if #messages > 0 then
+            vim.notify(table.concat(messages, '\n'), vim.log.levels.INFO, {
+                title = 'LSP Progress',
+                timeout = 1000,
+                replace = true,
+                animate = false,
+                stage = 'static'
+            })
+        end
+    end
+})
+
+-- Show LSP client status on attach
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client then
+            vim.notify(string.format('LSP attached: %s', client.name), vim.log.levels.INFO, {
+                title = 'LSP Status',
+                timeout = 2000,
+                animate = false,
+                stage = 'static'
+            })
+        end
+    end
+})
+
 -- LSP attach autocmd for common configuration
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('my.lsp', {}),
