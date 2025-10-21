@@ -55,16 +55,17 @@ vim.api.nvim_set_keymap('n', '<leader>w', ':wa<CR>', { noremap = true, silent = 
 vim.api.nvim_set_keymap('n', '<leader>wq', ':wq<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>q', ':qa<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bd', ':bd<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ntf', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
 
--- -- Auto closing tag for HTML
--- vim.api.nvim_create_augroup("MyXML", { clear = true })
--- vim.api.nvim_create_autocmd("FileType", {
---     group = "MyXML",
---     pattern = "html",
---     callback = function()
---         vim.keymap.set("i", "</", "</<C-x><C-o><ESC>F>a<CR><ESC>O", { buffer = true })
---     end,
--- })
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "json",
+    callback = function ()
+        -- normal mode
+        vim.api.nvim_set_keymap('n', '<leader>jq', ':%!jq .<CR>', {buffer = true, desc = "Format JSON strings"})
+        -- visual mode
+        vim.api.nvim_set_keymap('v', '<leader>jq', ":'<,'>!jq .<CR>", {buffer = true, desc = "Format JSON strings"})
+    end,
+})
 
 -- lualine setup
 require('lualine').setup {
