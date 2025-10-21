@@ -8,6 +8,8 @@ vim.opt.encoding = "utf-8"
 vim.opt.tabstop = 4               -- Number of spaces a tab counts for
 vim.opt.shiftwidth = 4            -- Number of spaces for auto-indent
 vim.opt.expandtab = true          -- Use spaces instead of tabs
+vim.opt.ignorecase = true         -- Ignore case in search patterns
+vim.opt.smartcase = true          -- Override ignorecase if search pattern contains uppercase
 -- Indent
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "javascript", "typescript",

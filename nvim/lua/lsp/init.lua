@@ -123,6 +123,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
         vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action,
             vim.tbl_extend("force", opts, { desc = "Code action" }))
+        vim.keymap.set("n", "<leader>ci", vim.lsp.buf.incoming_calls,
+            vim.tbl_extend("force", opts, { desc = "Show incoming calls" }))
+        vim.keymap.set("n", "<leader>co", vim.lsp.buf.outgoing_calls,
+            vim.tbl_extend("force", opts, { desc = "Show outgoing calls" }))
 
         -- Tab completion keymaps
         vim.keymap.set("i", "<Tab>", function()

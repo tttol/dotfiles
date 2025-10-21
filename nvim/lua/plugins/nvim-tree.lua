@@ -31,6 +31,10 @@ return {
             
             -- Remove q mapping
             vim.keymap.del('n', 'q', { buffer = bufnr })
+
+            -- Custom buffer navigation
+            vim.keymap.set('n', '<C-h>', '<C-w>h', { buffer = bufnr, desc = 'Move to left buffer' })
+            vim.keymap.set('n', '<C-l>', '<C-w>l', { buffer = bufnr, desc = 'Move to right buffer' })
         end
     }
   end,
