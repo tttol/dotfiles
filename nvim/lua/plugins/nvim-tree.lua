@@ -29,12 +29,12 @@ return {
             -- Default mappings
             api.config.mappings.default_on_attach(bufnr)
             
-            -- Remove q mapping
+            -- Remove default mappings
             vim.keymap.del('n', 'q', { buffer = bufnr })
 
             -- Custom buffer navigation
-            vim.keymap.set('n', '<C-h>', '<C-w>h', { buffer = bufnr, desc = 'Move to left buffer' })
-            vim.keymap.set('n', '<C-l>', '<C-w>l', { buffer = bufnr, desc = 'Move to right buffer' })
+            vim.keymap.set('n', '<C-h>', ':bp<CR>', {desc = 'Move to previous buffer'})
+            vim.keymap.set('n', '<C-l>', ':bn<CR>', {desc = 'Move to next buffer'})
         end
     }
   end,
