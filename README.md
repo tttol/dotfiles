@@ -1,6 +1,6 @@
 # dotfiles
 
-## Configuration Files by Directory
+Configuration Files by Directory
 
 | Directory | Description | Configuration Files |
 |-----------|-------------|---------------------|
