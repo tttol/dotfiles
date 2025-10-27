@@ -39,3 +39,8 @@ describe('Calculator', () => {
 
 ```
 - Don't change a method's visibility just to make tests pass (for example, changing private to public).
+- Use parameterized test pattern as possinble.
+
+# Language-Specific instructions
+## HTML/CSS
+- Avoid using flexbox whenever possible - explore alternative CSS solutions first. Only use flexbox when it's truly the only way to achieve the requirement.
