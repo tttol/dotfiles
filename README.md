@@ -12,6 +12,3 @@
 | `squid/` | Squid proxy configuration | `squid.conf` - Squid config file |
 | `claude/` | Claude Code configuration | `CLAUDE.md` - Claude instructions<br>`commands/` - Custom commands |
 | `obsidian/` | Obsidian configuration | `customizes.css` - Custom CSS<br>`copy_obsidian_config.sh` - Config copy script |
-
-## Reference
-- .zshrc: https://www.m3tech.blog/entry/dotfiles-bonsai
