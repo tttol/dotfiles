@@ -9,7 +9,7 @@ return {
     config = function()
         require('render-markdown').setup({
             heading = {
-                enabled = true,
+                enabled = false,
                 render_modes = false,
                 atx = true,
                 setext = true,
@@ -24,8 +24,8 @@ return {
                 border = true,
                 border_virtual = false,
                 border_prefix = false,
-                above = '▄',
-                below = '▀',
+                above = '',
+                below = '',
                 backgrounds = {
                     'RenderMarkdownH3Bg',
                     'RenderMarkdownH3Bg',

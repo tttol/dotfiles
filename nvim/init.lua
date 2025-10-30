@@ -21,6 +21,14 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.expandtab = true
     end,
 })
+-- Markdown auto bullet list continuation
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
+    callback = function()
+        vim.bo.formatoptions = vim.bo.formatoptions .. "ro"
+        vim.bo.comments = "b:-,b:*,b:+"
+    end,
+})
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
