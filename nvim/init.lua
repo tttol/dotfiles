@@ -77,6 +77,14 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- Turn off IME when normal mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+  pattern = "*",
+  callback = function()
+    vim.fn.system("osascript -e 'tell application \"System Events\" to key code 102'")
+  end,
+})
+
 -- lualine setup
 require('lualine').setup {
     options = { theme = 'onedark' }
