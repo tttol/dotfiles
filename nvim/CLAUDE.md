@@ -43,3 +43,6 @@ Notable plugins configured include:
 - The main LSP configuration is currently in `lua/lsp.lua`, not in the plugins system
 - Individual language server configs exist in `lua/plugins/lsp/` but may not be actively loaded
 - Configuration includes both English comments and Japanese user instructions
+
+# new h1
+## new h2

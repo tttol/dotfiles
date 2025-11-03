@@ -8,6 +8,7 @@ return {
     opts = {},
     config = function()
         require('render-markdown').setup({
+            render_modes = true,
             heading = {
                 enabled = false,
                 render_modes = false,
@@ -15,7 +16,7 @@ return {
                 setext = true,
                 sign = false,
                 icons = {},
-                position = 'overlay',
+                position = 'inline',
                 width = 'full',
                 left_margin = 0,
                 left_pad = 0,
@@ -43,6 +44,10 @@ return {
                     'RenderMarkdownH6',
                 },
                 custom = {},
+            },
+            indent = {
+                enabled = true,
+                skip_heading = false,
             },
         })
     end
