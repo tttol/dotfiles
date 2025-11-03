@@ -5,7 +5,9 @@
 - Always ne conscious about `Don't Repeat Yourself`(DRY) 
 - Always be conscious about `Keep It Simple Stupid!`(KISS) 
 - Always make the implementation simple. You should not install unnecessary additional libraries or write unnecessarily complex conditional logic. First, consider whether you can achieve the requirements using only the standard library, and only consider installing additional libraries when it's genuinely difficult to accomplish with the standard library alone.
-
+- Write immutable code wherever possible. Variables should not be reassigned after their initial declaration.
+- You should not use global variables. You had better use small-scoped and immutable variables as possible.
+ 
 # Test Code
 - Follow the AAA pattern: Arrange, Act, and Assert. These represent the three phases of a test.
 - Arrange: Set up your test data, mocks, expected values, and everything else you need.
@@ -44,3 +46,4 @@ describe('Calculator', () => {
 # Language-Specific instructions
 ## HTML/CSS
 - Avoid using flexbox whenever possible - explore alternative CSS solutions first. Only use flexbox when it's truly the only way to achieve the requirement.
+
