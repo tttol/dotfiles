@@ -1,0 +1,33 @@
+
+{
+    "hooks": {
+        "Stop": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "afplay /System/Library/Sounds/Glass.aiff"
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": {
+        "allow": [],
+        "deny": [
+            "Bash(rm -rf:*)",
+            "Bash(gh repo delete:*)",
+            "Bash(gh issue delete:*)",
+            "Bash(gh pr delete:*)",
+            "Bash(gh release delete:*)",
+            "Bash(gh secret delete:*)",
+            "Bash(gh variable delete:*)",
+            "Bash(gh label delete:*)",
+            "Bash(gh ssh-key delete:*)",
+            "Bash(gh gpg-key delete:*)",
+            "Bash(gh workflow delete:*)",
+            "Bash(gh cache delete:*)"
+        ]
+    }
+}

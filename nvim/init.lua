@@ -27,6 +27,20 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         vim.bo.formatoptions = vim.bo.formatoptions .. "ro"
         vim.bo.comments = "b:-,b:*,b:+"
+        -- Tab to indent bullet lists
+        vim.api.nvim_buf_set_keymap(0, 'i', '<Tab>',
+            [[<Cmd>lua require('markdown_indent').indent_bullet()<CR>]],
+            { noremap = true, silent = true })
+        vim.api.nvim_buf_set_keymap(0, 'n', '<Tab>',
+            [[<Cmd>lua require('markdown_indent').indent_bullet()<CR>]],
+            { noremap = true, silent = true })
+        -- Shift+Tab to unindent bullet lists
+        vim.api.nvim_buf_set_keymap(0, 'i', '<S-Tab>',
+            [[<Cmd>lua require('markdown_indent').unindent_bullet()<CR>]],
+            { noremap = true, silent = true })
+        vim.api.nvim_buf_set_keymap(0, 'n', '<S-Tab>',
+            [[<Cmd>lua require('markdown_indent').unindent_bullet()<CR>]],
+            { noremap = true, silent = true })
     end,
 })
 -- disable netrw at the very start of your init.lua
