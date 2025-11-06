@@ -66,6 +66,14 @@ vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#878103" })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl = true })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
 
+-- Markdown heading colors
+vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0" })
+
 -- Keybindings
 -- vim.g.mapleader = " "
 vim.api.nvim_set_keymap('n', '<C-u>', '10<C-u>', { noremap = true, silent = true })
