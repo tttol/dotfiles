@@ -56,7 +56,8 @@ vim.opt.listchars = { lead = "·", trail = "·", tab = "→ " }
 
 -- Colorscheme
 -- vim.cmd.colorscheme("unokai")
-vim.cmd.colorscheme("habamax")
+-- vim.cmd.colorscheme("habamax")
+vim.cmd.colorscheme("tokyonight")
 
 -- Diagnostic colors (set after colorscheme to avoid override)
 vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#FFB3BA" })
