@@ -21,28 +21,6 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.expandtab = true
     end,
 })
--- Markdown auto bullet list continuation
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "markdown",
-    callback = function()
-        vim.bo.formatoptions = vim.bo.formatoptions .. "ro"
-        vim.bo.comments = "b:-,b:*,b:+"
-        -- Tab to indent bullet lists
-        vim.api.nvim_buf_set_keymap(0, 'i', '<Tab>',
-            [[<Cmd>lua require('markdown_indent').indent_bullet()<CR>]],
-            { noremap = true, silent = true })
-        vim.api.nvim_buf_set_keymap(0, 'n', '<Tab>',
-            [[<Cmd>lua require('markdown_indent').indent_bullet()<CR>]],
-            { noremap = true, silent = true })
-        -- Shift+Tab to unindent bullet lists
-        vim.api.nvim_buf_set_keymap(0, 'i', '<S-Tab>',
-            [[<Cmd>lua require('markdown_indent').unindent_bullet()<CR>]],
-            { noremap = true, silent = true })
-        vim.api.nvim_buf_set_keymap(0, 'n', '<S-Tab>',
-            [[<Cmd>lua require('markdown_indent').unindent_bullet()<CR>]],
-            { noremap = true, silent = true })
-    end,
-})
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -68,12 +46,12 @@ vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl =
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
 
 -- Markdown heading colors
-vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0" })
-vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { fg = "#5BA3D0" })
-vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { fg = "#5BA3D0" })
-vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0" })
-vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0" })
-vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0" })
+vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0", bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { fg = "#5BA3D0", bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { fg = "#5BA3D0", bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0", bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0", bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0", bold = true })
 
 -- Keybindings
 -- vim.g.mapleader = " "
@@ -115,3 +93,6 @@ require('lualine').setup {
 
 -- LSP(lsp/init.lua)
 require('lsp')
+
+-- nvim-colorizer setup
+require'colorizer'.setup()
