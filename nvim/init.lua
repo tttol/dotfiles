@@ -1,7 +1,9 @@
 -- lazy.vim
 require("config.lazy")
 
--- General
+------------------------------------------------
+--- GENERAL
+------------------------------------------------
 vim.opt.clipboard = "unnamedplus" -- Sync with OS clipboard
 vim.opt.number = true             -- Show line numbers
 vim.opt.encoding = "utf-8"
@@ -21,6 +23,13 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.expandtab = true
     end,
 })
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
+    callback = function()
+        vim.bo.formatoptions = vim.bo.formatoptions .. "ro"
+        vim.bo.comments = "b:-,b:*,b:+,b:1."
+    end,
+})
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -32,9 +41,11 @@ vim.opt.termguicolors = true
 vim.opt.list = true
 vim.opt.listchars = { lead = "·", trail = "·", tab = "→ " }
 
--- Colorscheme
--- vim.cmd.colorscheme("unokai")
--- vim.cmd.colorscheme("habamax")
+------------------------------------------------
+--- COLOR
+------------------------------------------------
+
+-- colorschema
 vim.cmd.colorscheme("tokyonight")
 
 -- Diagnostic colors (set after colorscheme to avoid override)
@@ -44,6 +55,7 @@ vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#b30000" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#878103" })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl = true })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#5e5e5c" })
 
 -- Markdown heading colors
 vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0", bold = true })
@@ -53,7 +65,10 @@ vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0", bold = tr
 vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0", bold = true })
 vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0", bold = true })
 
--- Keybindings
+------------------------------------------------
+--- KEYBINDINGS
+------------------------------------------------
+
 -- vim.g.mapleader = " "
 vim.api.nvim_set_keymap('n', '<C-u>', '10<C-u>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-d>', '10<C-d>', { noremap = true, silent = true })
@@ -67,7 +82,13 @@ vim.api.nvim_set_keymap('n', '<leader>wq', ':wq<CR>', { noremap = true, silent =
 vim.api.nvim_set_keymap('n', '<leader>q', ':qa<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>bd', ':bd<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>ntf', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true }) -- [:terminal] switch to normal mode with <ESC>
 
+------------------------------------------------
+--- AUTOCMD
+------------------------------------------------
+
+--- [jq] prettier JSON
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "json",
     callback = function ()
@@ -78,7 +99,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Turn off IME when normal mode
+-- [IME] Turn off IME when normal mode
 vim.api.nvim_create_autocmd("InsertLeave", {
   pattern = "*",
   callback = function()
@@ -86,6 +107,17 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   end,
 })
 
+-- [:terminal] Start with insert mode
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function()
+    vim.cmd("startinsert")
+  end,
+})
+
+------------------------------------------------
+--- SETUP
+------------------------------------------------
 -- lualine setup
 require('lualine').setup {
     options = { theme = 'onedark' }
