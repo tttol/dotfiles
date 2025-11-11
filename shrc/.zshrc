@@ -1,7 +1,14 @@
-# prompt
+########################################################
+# PROMPT
+########################################################
+
 PROMPT='%K{#00820d}%n@%30<...<%~%k'
 
+
+########################################################
 # oh my zsh!
+########################################################
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=''
 plugins=(
@@ -12,13 +19,23 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# alias
+########################################################
+# ALIAS
+########################################################
+
 # ※Oh My Zshの後にaliasを書かないと反映されない
-alias ll='ls -la'
+# alias ll='ls -la'
 alias history='history -100'
 alias sync-fork="~/Documents/workspace/sync-fork.sh"
 alias nv='nvim'
 mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
+alias icloud='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-icloud-vault'
+alias ll='eza --icons -al'
+alias ll2='eza --icons -al -T -L 2'
+
+########################################################
+# COMPLETION
+########################################################
 
 # zsh-completions setting
 if [ -e /usr/local/share/zsh-completions ]; then
@@ -36,13 +53,20 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd  # 補間候補にカレ�
 
 . "$HOME/.local/bin/env"
 
+########################################################
 # PATH
+########################################################
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
 export SPRING_PROFILES_ACTIVE=local
 export PATH="$PATH:$HOME/.cargo/bin"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+########################################################
+# TOOL
+########################################################
 
 # starship
 eval "$(starship init zsh)"
@@ -54,3 +78,5 @@ eval "$(starship init zsh)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# zoxide
+eval "$(zoxide init zsh)"
