@@ -76,4 +76,73 @@ config.tab_bar_at_bottom = false
 config.hide_tab_bar_if_only_one_tab = false
 
 
+------------------------------------
+--- WINDOW, PANE
+------------------------------------
+config.keys = {
+  -- Horizontal split (split into top and bottom)
+  {
+    key = '\'',
+    mods = 'SUPER|SHIFT',
+    action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
+  },
+  -- Vertical split (split into left and right)
+  {
+    key = '\'',
+    mods = 'SUPER',
+    action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+  },
+ 
+  -- move to other pane
+  {
+    key = 'h',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Left',
+  },
+  {
+    key = 'l',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Right',
+  },
+  {
+    key = 'k',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Up',
+  },
+  {
+    key = 'j',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Down',
+  },
+ 
+  -- close pane
+  {
+    key = 'w',
+    mods = 'SUPER',
+    action = wezterm.action.CloseCurrentPane { confirm = true },
+  },
+  
+  -- pane size
+  {
+    key = 'LeftArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Left', 5 },
+  },
+  {
+    key = 'RightArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Right', 5 },
+  },
+  {
+    key = 'UpArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Up', 5 },
+  },
+  {
+    key = 'DownArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Down', 5 },
+  },
+}
+
 return config
