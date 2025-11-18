@@ -3,10 +3,35 @@ local wezterm = require 'wezterm'
 
 local config = wezterm.config_builder()
 
+------------------------------------
+--- GENERAL
+------------------------------------
+config.initial_cols = 120
+config.initial_rows = 28
+-- config.color_scheme = 'AdventureTime'
+config.color_scheme = 'Tokyo Night'
+
+--- Open link by mouse click
+config.mouse_bindings = {
+  -- Ctrl-click will open the link under the mouse cursor
+  {
+    event = { Up = { streak = 1, button = 'Left' } },
+    mods = 'SUPER',
+    action = wezterm.action.OpenLinkAtMouseCursor,
+  },
+}
 -- font
 config.font_size =14
-config.font = wezterm.font 'CommitMono Nerd Font'
+-- config.font = wezterm.font 'CommitMono Nerd Font'
+config.font = wezterm.font_with_fallback({
+  'CommitMono Nerd Font',
+  'Hiragino Sans',
+  'Arial',
+})
 
+------------------------------------
+--- TAB
+------------------------------------
 -- tab appearance
 local SOLID_LEFT_ARROW = wezterm.nerdfonts.ple_lower_right_triangle
 local SOLID_RIGHT_ARROW = wezterm.nerdfonts.ple_upper_left_triangle
@@ -50,9 +75,74 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 config.hide_tab_bar_if_only_one_tab = false
 
-config.initial_cols = 120
-config.initial_rows = 28
--- config.color_scheme = 'AdventureTime'
-config.color_scheme = 'Tokyo Night'
+
+------------------------------------
+--- WINDOW, PANE
+------------------------------------
+config.keys = {
+  -- Horizontal split (split into top and bottom)
+  {
+    key = '\'',
+    mods = 'SUPER|SHIFT',
+    action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
+  },
+  -- Vertical split (split into left and right)
+  {
+    key = '\'',
+    mods = 'SUPER',
+    action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+  },
+ 
+  -- move to other pane
+  {
+    key = 'h',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Left',
+  },
+  {
+    key = 'l',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Right',
+  },
+  {
+    key = 'k',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Up',
+  },
+  {
+    key = 'j',
+    mods = 'SUPER',
+    action = wezterm.action.ActivatePaneDirection 'Down',
+  },
+ 
+  -- close pane
+  {
+    key = 'w',
+    mods = 'SUPER',
+    action = wezterm.action.CloseCurrentPane { confirm = true },
+  },
+  
+  -- pane size
+  {
+    key = 'LeftArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Left', 5 },
+  },
+  {
+    key = 'RightArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Right', 5 },
+  },
+  {
+    key = 'UpArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Up', 5 },
+  },
+  {
+    key = 'DownArrow',
+    mods = 'SUPER',
+    action = wezterm.action.AdjustPaneSize { 'Down', 5 },
+  },
+}
 
 return config
