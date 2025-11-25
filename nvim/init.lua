@@ -15,7 +15,7 @@ vim.opt.smartcase = true          -- Override ignorecase if search pattern conta
 -- Indent
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "javascript", "typescript",
-        "javascriptreact", "typescriptreact" },
+    "javascriptreact", "typescriptreact" },
     callback = function()
         vim.bo.shiftwidth = 2
         vim.bo.tabstop = 2
@@ -40,7 +40,6 @@ vim.opt.termguicolors = true
 -- Show leading whitespace
 vim.opt.list = true
 vim.opt.listchars = { lead = "·", trail = "·", tab = "→ " }
-
 ------------------------------------------------
 --- COLOR
 ------------------------------------------------
@@ -55,7 +54,7 @@ vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#b30000" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#878103" })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl = true })
 vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#5e5e5c" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#020026" })
 
 -- Markdown heading colors
 vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0", bold = true })
@@ -101,18 +100,18 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- [IME] Turn off IME when normal mode
 vim.api.nvim_create_autocmd("InsertLeave", {
-  pattern = "*",
-  callback = function()
-    vim.fn.system("osascript -e 'tell application \"System Events\" to key code 102'")
-  end,
+    pattern = "*.md",
+    callback = function()
+        vim.fn.system("osascript -e 'tell application \"System Events\" to key code 102'")
+    end,
 })
 
 -- [:terminal] Start with insert mode
 vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "*",
-  callback = function()
-    vim.cmd("startinsert")
-  end,
+    pattern = "*",
+    callback = function()
+        vim.cmd("startinsert")
+    end,
 })
 
 ------------------------------------------------
