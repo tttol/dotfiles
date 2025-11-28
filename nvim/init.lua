@@ -40,29 +40,67 @@ vim.opt.termguicolors = true
 -- Show leading whitespace
 vim.opt.list = true
 vim.opt.listchars = { lead = "·", trail = "·", tab = "→ " }
+
+-- Ensure listchars is applied after plugins load
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        vim.opt.list = true
+        vim.opt.listchars = { lead = "·", trail = "·", tab = "→ " }
+    end,
+})
+
+-- Enable relative row number when normal mode
+vim.opt.relativenumber = true
+vim.opt.number = false
+-- Enable relative row number when switching to normal mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+    pattern = "*",
+    callback = function()
+        vim.opt.relativenumber = true
+        vim.opt.number = false
+    end,
+})
+-- Disable relative row number when switching to insert mode
+vim.api.nvim_create_autocmd("InsertEnter", {
+    pattern = "*",
+    callback = function()
+        vim.opt.relativenumber = false
+        vim.opt.number = true
+    end,
+})
+
 ------------------------------------------------
 --- COLOR
 ------------------------------------------------
 
+-- ColorScheme適用後にハイライトを設定
+vim.api.nvim_create_autocmd("ColorScheme", {
+    pattern = "*",
+    callback = function()
+        -- Diagnostic colors
+        vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#FFB3BA" })
+        vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#878103" })
+        vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#b30000" })
+        vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#878103" })
+        vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl = true })
+        vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
+        vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#020026" })
+
+        -- Markdown heading colors
+        vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0", bold = true })
+        vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { fg = "#5BA3D0", bold = true })
+        vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { fg = "#5BA3D0", bold = true })
+        vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0", bold = true })
+        vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0", bold = true })
+        vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0", bold = true })
+ 
+        -- Highlight current row number
+        vim.opt.cursorline = true
+        vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#ff9e64', bold = true })
+    end,
+})
 -- colorschema
 vim.cmd.colorscheme("tokyonight")
-
--- Diagnostic colors (set after colorscheme to avoid override)
-vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#FFB3BA" })
-vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#878103" })
-vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#b30000" })
-vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#878103" })
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = "#b30000", undercurl = true })
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = "#878103", undercurl = true })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#020026" })
-
--- Markdown heading colors
-vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { fg = "#5BA3D0", bold = true })
-vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { fg = "#5BA3D0", bold = true })
-vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { fg = "#5BA3D0", bold = true })
-vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { fg = "#5BA3D0", bold = true })
-vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0", bold = true })
-vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0", bold = true })
 
 ------------------------------------------------
 --- KEYBINDINGS
