@@ -50,14 +50,13 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 -- Enable relative row number when normal mode
-vim.opt.relativenumber = true
-vim.opt.number = false
+vim.opt.relativenumber = true -- enable relative row number
+vim.opt.number = true -- show absolute row number at current row
 -- Enable relative row number when switching to normal mode
 vim.api.nvim_create_autocmd("InsertLeave", {
     pattern = "*",
     callback = function()
         vim.opt.relativenumber = true
-        vim.opt.number = false
     end,
 })
 -- Disable relative row number when switching to insert mode
@@ -65,7 +64,6 @@ vim.api.nvim_create_autocmd("InsertEnter", {
     pattern = "*",
     callback = function()
         vim.opt.relativenumber = false
-        vim.opt.number = true
     end,
 })
 

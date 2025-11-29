@@ -82,8 +82,9 @@ return {
       data_dir = data_dir .. '/' .. vim.fn.fnamemodify(config.root_dir, ':p:h:t')
     end
 
+    local jdtls_path = vim.fn.expand('~/jdt-language-server-1.55.0-202511271007/bin/jdtls')
     local config_cmd = {
-      'jdtls',
+      jdtls_path,
       '-data',
       data_dir,
       get_jdtls_jvm_args(),
