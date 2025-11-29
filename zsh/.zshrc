@@ -29,9 +29,10 @@ alias history='history -100'
 alias sync-fork="~/Documents/workspace/sync-fork.sh"
 alias nv='nvim'
 mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
-alias icloud='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-icloud-vault'
+alias memo='nvim ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-icloud-vault'
 alias ll='eza --icons -al'
 alias ll2='eza --icons -al -T -L 2'
+alias nvf='nvim $(fzf)'
 
 ########################################################
 # COMPLETION
@@ -54,6 +55,15 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd  # 補間候補にカレ�
 . "$HOME/.local/bin/env"
 
 ########################################################
+# Fuzzy find
+########################################################
+nvd() {
+  local dir
+  dir=$(fd --type d | fzf --preview 'tree -L 1 {}')
+  [ -n "$dir" ] && nvim "$dir"
+}
+
+########################################################
 # PATH
 ########################################################
 
@@ -61,7 +71,8 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
 export SPRING_PROFILES_ACTIVE=local
 export PATH="$PATH:$HOME/.cargo/bin"
-
+export PATH="$PATH:$HOME/jdt-language-server-1.55.0-202511271007/bin"
+export JDTLS_JVM_ARGS="-javaagent:$HOME/.local/share/java/lombok.jar"
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 ########################################################
