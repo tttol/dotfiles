@@ -12,6 +12,9 @@ return {
           width = 30,
           max_width = 30,
         },
+        win_options = {
+          wrap = true,
+        },
       },
     },
   },
