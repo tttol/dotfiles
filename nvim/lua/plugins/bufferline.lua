@@ -5,10 +5,9 @@ return {
   config = function()
     require("bufferline").setup{
       options = {
-        max_name_length = 30, -- max charachter lengh of filename in each buffer
-        max_prefix_length = 15, -- max character length of pathname in each buffer
+        max_name_length = 60,
+        max_prefix_length = 30,
         truncate_names = true,
-        -- tab_size = 18,
       }
     }
   end
