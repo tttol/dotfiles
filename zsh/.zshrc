@@ -32,7 +32,6 @@ mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
 alias memo='nvim ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-icloud-vault'
 alias ll='eza --icons -al'
 alias ll2='eza --icons -al -T -L 2'
-alias nvf='nvim $(fzf)'
 
 ########################################################
 # COMPLETION
@@ -57,12 +56,13 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd  # 補間候補にカレ�
 ########################################################
 # FUZZY FIND
 ########################################################
-# nvd() {
-#   local dir
-#   cd
-#   dir=$(fd --type d | fzf --preview 'tree -L 1 {}')
-#   [ -n "$dir" ] && nvim "$dir"
-# }
+unalias nvf 2>/dev/null
+nvf() {
+  local dir
+  cd
+  dir=$(fzf)
+  [ -n "$dir" ] && nvim "$dir"
+}
 
 nvd() {
   local dir
