@@ -70,7 +70,7 @@ nvd() {
   dir=$(fd --type d --hidden --exclude .git | fzf \
     --preview 'eza --tree --level=2 --icons --git {} 2>/dev/null || tree -L 2 {} 2>/dev/null || ls -la {}' \
     --preview-window=right:60%)
-  [ -n "$dir" ] && nvim "$dir"
+  [ -n "$dir" ] && cd "$dir" && nvim .
 }
 
 cdf() {
