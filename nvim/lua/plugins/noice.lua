@@ -3,11 +3,29 @@ return {
   event = "VeryLazy",
   opts = {
     notify = {
-      enabled = false,
+      enabled = true,
+    },
+    views = {
+      notify = {
+        replace = true,
+        size = {
+          width = 30,
+          max_width = 30,
+        },
+      },
     },
   },
   dependencies = {
     "MunifTanjim/nui.nvim",
     "rcarriga/nvim-notify",
   },
+  config = function(_, opts)
+    require("noice").setup(opts)
+    require("notify").setup({
+      stages = "fade",
+      timeout = 3000,
+      top_down = false,
+      max_width = 30,
+    })
+  end,
 }
