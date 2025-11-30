@@ -57,10 +57,19 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd  # 補間候補にカレ�
 ########################################################
 # FUZZY FIND
 ########################################################
+# nvd() {
+#   local dir
+#   cd
+#   dir=$(fd --type d | fzf --preview 'tree -L 1 {}')
+#   [ -n "$dir" ] && nvim "$dir"
+# }
+
 nvd() {
   local dir
   cd
-  dir=$(fd --type d | fzf --preview 'tree -L 1 {}')
+  dir=$(fd --type d --hidden --exclude .git | fzf \
+    --preview 'eza --tree --level=2 --icons --git {} 2>/dev/null || tree -L 2 {} 2>/dev/null || ls -la {}' \
+    --preview-window=right:60%)
   [ -n "$dir" ] && nvim "$dir"
 }
 
