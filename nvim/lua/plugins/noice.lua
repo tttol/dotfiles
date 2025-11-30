@@ -9,8 +9,8 @@ return {
       notify = {
         replace = true,
         size = {
-          width = 30,
-          max_width = 30,
+          width = 50,
+          max_width = 50,
         },
         win_options = {
           wrap = true,
