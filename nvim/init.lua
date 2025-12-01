@@ -149,6 +149,7 @@ local function toggle_floating_terminal()
     if vim.bo[floating_term_buf].buftype ~= 'terminal' then
         vim.fn.jobstart(vim.o.shell, {term = true})
     end
+    vim.api.nvim_buf_set_keymap(floating_term_buf, 't', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
     vim.cmd('startinsert')
 end
 
