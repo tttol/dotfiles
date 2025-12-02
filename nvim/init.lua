@@ -159,10 +159,15 @@ vim.keymap.set('i', '<C-z>', toggle_floating_terminal, { noremap = true, silent 
 vim.keymap.set('v', '<C-z>', toggle_floating_terminal, { noremap = true, silent = true })
 vim.keymap.set('t', '<C-z>', toggle_floating_terminal, { noremap = true, silent = true })
 
--- fzf-lua 
+-- fzf-lua
 vim.cmd('cnoreabbrev fzf FzfLua')
 vim.cmd('cnoreabbrev ff FzfLua files')
 vim.cmd('cnoreabbrev fg FzfLua grep')
+
+-- oil.nvim
+vim.cmd('cnoreabbrev oil Oil')
+vim.keymap.set('n', '<C-h>', ':bp<CR>', {desc = 'Move to previous buffer'})
+vim.keymap.set('n', '<C-l>', ':bn<CR>', {desc = 'Move to next buffer'})
 ------------------------------------------------
 --- AUTOCMD
 ------------------------------------------------
