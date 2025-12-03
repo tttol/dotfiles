@@ -17,13 +17,13 @@ return {
         },
         lsp = {
             progress = {
-                enabled = false,
+                enabled = true,
             },
             hover = {
-                enabled = false,
+                enabled = true,
             },
             signature = {
-                enabled = false,
+                enabled = true,
             },
         },
     },

@@ -32,6 +32,7 @@ mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
 alias memo='nvim ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-icloud-vault'
 alias ll='eza --icons -al'
 alias ll2='eza --icons -al -T -L 2'
+alias lg='lazygit'
 
 ########################################################
 # COMPLETION

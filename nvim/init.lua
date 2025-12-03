@@ -168,6 +168,9 @@ vim.cmd('cnoreabbrev fg FzfLua grep')
 vim.cmd('cnoreabbrev oil Oil')
 vim.keymap.set('n', '<C-h>', ':bp<CR>', {desc = 'Move to previous buffer'})
 vim.keymap.set('n', '<C-l>', ':bn<CR>', {desc = 'Move to next buffer'})
+
+-- lazy
+vim.cmd('cnoreabbrev lazy Lazy')
 ------------------------------------------------
 --- AUTOCMD
 ------------------------------------------------
