@@ -92,6 +92,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { fg = "#5BA3D0", bold = true })
         vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { fg = "#5BA3D0", bold = true })
 
+        -- Java syntax colors
+        vim.api.nvim_set_hl(0, "@lsp.type.annotation.java", { fg = "#bfbc80" })
+        vim.api.nvim_set_hl(0, "@keyword.import.java", { fg = "#ff9e64" })
+
         -- Highlight current row number
         vim.opt.cursorline = true
         vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#ff9e64', bold = true })
