@@ -35,6 +35,7 @@ return {
         local root_markers = { "gradlew", "mvnw", ".git", "pom.xml", "build.gradle" }
         local root_dir = require("jdtls.setup").find_root(root_markers)
 
+        local lombok_path = vim.fn.expand("~/.local/share/java/lombok.jar")
         local config = {
           cmd = {
             "java",
@@ -47,6 +48,7 @@ return {
             "--add-modules=ALL-SYSTEM",
             "--add-opens", "java.base/java.util=ALL-UNNAMED",
             "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+            "-javaagent:" .. lombok_path,
           },
           root_dir = root_dir,
           settings = {
