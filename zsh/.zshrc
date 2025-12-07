@@ -83,6 +83,40 @@ cdf() {
   [ -n "$dir" ] && z "$dir"
 }
 
+
+########################################################
+# KEYBIND
+########################################################
+bindkey -v
+
+function zle-keymap-select zle-line-init {
+  case $KEYMAP in
+    vicmd)
+      # block cursor
+      echo -ne '\e[1 q'
+      ;;
+    viins|main)
+      # line cursor
+      echo -ne '\e[5 q'
+      ;;
+  esac
+  
+  # show current mode(NORMAL)
+  VIM_PROMPT="%{$fg_bold[yellow]%} [NORMAL]% %{$reset_color%}"
+  RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}"
+  zle reset-prompt
+}
+
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+# コマンド実行前にビームカーソルに戻す
+preexec() {
+  echo -ne '\e[5 q'
+}
+
+################################################################################################################
+
 ########################################################
 # PATH
 ########################################################

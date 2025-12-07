@@ -79,7 +79,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 
 
     local title = determine_tab_title(tab)
-    local title_text = string.format("%s:%s" , tab.tab_index + 1, title)
+    local title_text = string.format("⌘%s:%s" , tab.tab_index + 1, title)
 
     return {
         { Background = { Color = edge_background } },
