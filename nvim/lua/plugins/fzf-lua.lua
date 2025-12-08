@@ -14,5 +14,14 @@ return {
         fzf_opts = {
             ['--wrap'] = true,
         },
+        files = {
+            file_ignore_patterns = {
+                "node_modules/",
+                ".git/",
+                "dist/",
+                "build/",
+                "bin/",
+            },
+        },
     },
 }
