@@ -3,14 +3,31 @@ vim.cmd [[set completeopt+=menuone,noselect,popup]]
 
 -- LSP progress handler
 local progress = {}
+
+-- Global function to get LSP progress status for statusline
+function _G.get_lsp_progress()
+    local messages = {}
+    for _, p in pairs(progress) do
+        local msg = string.format("[%s] %s", p.client_name, p.title)
+        if p.message ~= '' then
+            msg = msg .. ': ' .. p.message
+        end
+        if p.percentage then
+            msg = msg .. string.format(' (%d%%)', p.percentage)
+        end
+        table.insert(messages, msg)
+    end
+    return table.concat(messages, ' | ')
+end
+
 vim.api.nvim_create_autocmd('LspProgress', {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client then return end
-        
+
         local token = args.data.params.token
         local value = args.data.params.value
-        
+
         if value.kind == 'begin' then
             progress[token] = {
                 title = value.title,
@@ -26,29 +43,8 @@ vim.api.nvim_create_autocmd('LspProgress', {
         elseif value.kind == 'end' then
             progress[token] = nil
         end
-        
-        -- Update statusline or show notification
-        local messages = {}
-        for _, p in pairs(progress) do
-            local msg = string.format("[%s] %s", p.client_name, p.title)
-            if p.message ~= '' then
-                msg = msg .. ': ' .. p.message
-            end
-            if p.percentage then
-                msg = msg .. string.format(' (%d%%)', p.percentage)
-            end
-            table.insert(messages, msg)
-        end
-        
-        if #messages > 0 then
-            vim.notify(table.concat(messages, '\n'), vim.log.levels.INFO, {
-                title = 'LSP Progress',
-                timeout = 1000,
-                replace = true,
-                animate = false,
-                stage = 'static'
-            })
-        end
+
+        vim.cmd('redrawstatus')
     end
 })
 
