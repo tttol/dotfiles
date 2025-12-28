@@ -122,7 +122,7 @@ preexec() {
 ########################################################
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-25.jdk/Contents/Home
 export SPRING_PROFILES_ACTIVE=local
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/jdt-language-server-1.55.0-202511271007/bin"
