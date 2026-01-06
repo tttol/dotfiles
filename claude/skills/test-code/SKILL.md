@@ -1,6 +1,6 @@
 ---
 name: test code
-description: the guideline about test code, testing, unit test and integration test.
+description: The guideline about test code. Use when implmenting test code.
 ---
 - Follow the Given-When-Then pattern. These represent the three phases of a test.
 - Given: Set up your test data, mocks, expected values, and everything else you need.
