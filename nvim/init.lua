@@ -175,6 +175,9 @@ vim.keymap.set('n', '<C-l>', ':bn<CR>', {desc = 'Move to next buffer'})
 
 -- lazy
 vim.cmd('cnoreabbrev lazy Lazy')
+
+-- lazygit
+vim.cmd('cnoreabbrev lg LazyGit')
 ------------------------------------------------
 --- AUTOCMD
 ------------------------------------------------
