@@ -108,7 +108,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
         local opts = { buffer = args.buf, noremap = true, silent = true }
         vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float,
             vim.tbl_extend("force", opts, { desc = "Show diagnostics" }))
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Jump to definition" }))
+        vim.keymap.set("n", "gd", function()
+            vim.lsp.buf.definition()
+            vim.schedule(function()
+                vim.cmd('normal! zz')
+            end)
+        end, vim.tbl_extend("force", opts, { desc = "Jump to definition" }))
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration,
             vim.tbl_extend("force", opts, { desc = "Jump to declaration" }))
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation,

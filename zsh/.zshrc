@@ -29,7 +29,7 @@ alias lg='lazygit'
 
 # zsh-completions setting
 # Lazy load compinit with zinit
-zinit ice wait lucid atinit'
+zinit ice wait lucid atload'
 autoload -Uz compinit && compinit -C
 if [ -e /usr/local/share/zsh-completions ]; then
     fpath=(/usr/local/share/zsh-completions $fpath)
