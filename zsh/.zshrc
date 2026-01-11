@@ -22,6 +22,7 @@ alias memo='nvim ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/tttol-
 alias ll='eza --icons -al'
 alias ll2='eza --icons -al -T -L 2'
 alias lg='lazygit'
+alias history='eval "$(fc -l -n 1  | fzf)"'
 
 ########################################################
 # COMPLETION

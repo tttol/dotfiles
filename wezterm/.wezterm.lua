@@ -20,7 +20,7 @@ config.mouse_bindings = {
     },
 }
 -- font
-config.font_size =14
+config.font_size =15
 -- config.font = wezterm.font 'CommitMono Nerd Font'
 config.font = wezterm.font_with_fallback({
     'CommitMono Nerd Font',
