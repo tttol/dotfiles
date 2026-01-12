@@ -302,3 +302,153 @@ home.sessionVariables = {
 1. **既存ファイルの削除**: Home Managerはシンボリックリンクを作成するため、既存の設定ファイルは削除する必要があります
 2. **バックアップ**: legacy/ディレクトリは動作確認完了まで削除しないでください
 3. **パッケージ管理の分離**: この構成ではパッケージ管理はNixで行いません。既存のHomebrew等を継続使用してください
+
+
+
+  Step 1: Flake の解析
+
+  ~/Documents/workspace/dotfiles/flake.nix を読み込む
+  ↓
+  inputs (nixpkgs, home-manager) を確認
+  ↓
+  outputs の homeConfigurations."tttol" を特定
+
+  Step 2: 依存関係の解決
+
+  flake.lock を確認
+  ↓
+  nixpkgs と home-manager の正確なバージョン（gitリビジョン）を特定
+  ↓
+  必要に応じてダウンロード・キャッシュ確認
+
+  Step 3: home.nix の評価
+
+  ~/Documents/workspace/dotfiles/home.nix を読み込む
+  ↓
+  設定内容を評価:
+    - home.username = "tttol"
+    - home.homeDirectory = "/Users/tttol"
+    - home.file エントリ（4つ）を確認
+
+  Step 4: 設定ファイルのソースパス解決
+
+  home.file.".config/nvim" → ~/Documents/workspace/dotfiles/config/nvim
+  home.file.".wezterm.lua" → ~/Documents/workspace/dotfiles/config/wezterm/wezterm.lua
+  home.file.".zshrc" → ~/Documents/workspace/dotfiles/config/zsh/.zshrc
+  home.file.".config/starship.toml" → ~/Documents/workspace/dotfiles/config/starship/starship.toml
+
+  Step 5: Nix Store へのコピー
+
+  config/ 配下のファイルを Nix Store にコピー
+  ↓
+  例: /nix/store/xxxxxxxxx-home-manager-files/.config/nvim/
+      /nix/store/yyyyyyyyy-home-manager-files/.wezterm.lua
+      等々
+
+  Step 6: 既存シンボリックリンクの確認
+
+  ~/.config/nvim が存在するか確認
+  ↓
+  既存ファイルの種類を判定:
+    - 通常のファイル/ディレクトリ → エラー（衝突）
+    - シンボリックリンク → 上書き可能
+    - 存在しない → 新規作成
+
+  Step 7: シンボリックリンクの作成
+
+  以下のシンボリックリンクを作成/更新:
+
+  ~/.config/nvim → /nix/store/xxxxx-home-manager-files/.config/nvim
+  ~/.wezterm.lua → /nix/store/xxxxx-home-manager-files/.wezterm.lua
+  ~/.zshrc → /nix/store/xxxxx-home-manager-files/.zshrc
+  ~/.config/starship.toml → /nix/store/xxxxx-home-manager-files/starship.toml
+
+  Step 8: Home Manager 世代の更新
+
+  新しい設定を「世代」として記録
+  ↓
+  ~/.local/state/nix/profiles/home-manager に新しいプロファイルを作成
+  ↓
+  世代番号がインクリメント（例: generation 5 → generation 6）
+
+  Step 9: アクティベーションスクリプト実行
+
+  設定変更を有効化
+  ↓
+  変更内容の出力:
+    - 作成されたシンボリックリンク
+    - 削除された古いシンボリックリンク
+    - 変更されたファイル
+
+  Step 10: 完了メッセージ
+
+  出力例:
+  Starting Home Manager activation
+  Activating checkFilesChanged
+  Activating checkLinkTargets
+  Activating writeBoundary
+  Activating createHomeFiles
+  Creating /Users/tttol/.config/nvim
+  Creating /Users/tttol/.wezterm.lua
+  ...
+  Activating linkGeneration
+  Finished Home Manager activation
+
+  具体的な例
+
+  初回実行時（既存ファイルがある場合）
+
+  $ home-manager switch --flake ~/Documents/workspace/dotfiles
+
+  エラーが発生する可能性:
+  error: Existing file '/Users/tttol/.zshrc' is in the way of '/nix/store/...'
+
+  理由: 既存の .zshrc がシンボリックリンクではなく通常のファイル
+
+  解決方法:
+  # 既存ファイルを退避
+  mv ~/.zshrc ~/.zshrc.backup
+  mv ~/.config/nvim ~/.config/nvim.backup
+  mv ~/.wezterm.lua ~/.wezterm.lua.backup
+
+  # 再度実行
+  home-manager switch --flake ~/Documents/workspace/dotfiles
+
+  2回目以降の実行時
+
+  $ home-manager switch --flake ~/Documents/workspace/dotfiles
+
+  実行内容:
+  - 既存のシンボリックリンクを新しい Nix Store パスに更新
+  - config/ 配下のファイルが変更されていれば、新しいバージョンをリンク
+  - 変更がなければ、既存のシンボリックリンクをそのまま維持
+
+  ロールバック方法
+
+  世代を管理しているため、以前の設定に戻すことが可能:
+
+  # 世代一覧を表示
+  home-manager generations
+
+  # 出力例:
+  # 2025-01-13 10:30:00 : id 6 -> /nix/store/xxxxx-home-manager-generation
+  # 2025-01-12 15:20:00 : id 5 -> /nix/store/yyyyy-home-manager-generation
+
+  # 特定の世代にロールバック
+  /nix/store/yyyyy-home-manager-generation/activate
+
+  実際のファイルシステムの状態
+
+  実行後、ホームディレクトリは以下のようになります:
+
+  $ ls -la ~/.zshrc
+  lrwxr-xr-x  1 tttol  staff  68 Jan 13 10:30 /Users/tttol/.zshrc -> /nix/store/abc123-home-manager-files/.zshrc
+
+  $ readlink ~/.zshrc
+  /nix/store/abc123-home-manager-files/.zshrc
+
+  $ cat /nix/store/abc123-home-manager-files/.zshrc
+  # 実際には config/zsh/.zshrc の内容
+
+  つまり、実ファイルは Nix Store に保存され、ホームディレクトリにはシンボリックリンクのみが作成されます。
+
