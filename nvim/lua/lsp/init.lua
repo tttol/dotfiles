@@ -146,13 +146,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
             end
         end, vim.tbl_extend("force", opts, { expr = true, desc = "Shift-Tab completion" }))
 
-        vim.keymap.set("i", "<CR>", function()
-            if vim.fn.pumvisible() == 1 then
-                return "<C-y>"
-            else
-                return "<CR>"
-            end
-        end, vim.tbl_extend("force", opts, { expr = true, desc = "Enter completion confirm" }))
+        -- vim.keymap.set("i", "<CR>", function()
+        --     if vim.fn.pumvisible() == 1 then
+        --         return "<C-y>"
+        --     else
+        --         local npairs_ok, npairs = pcall(require, 'nvim-autopairs')
+        --         if npairs_ok then
+        --             return npairs.autopairs_cr()
+        --         else
+        --             return "<CR>"
+        --         end
+        --     end
+        -- end, vim.tbl_extend("force", opts, { expr = true, replace_keycodes = false, desc = "Enter completion confirm" }))
 
         vim.opt_local.pumheight = 10 -- Limit popup menu height
     end,
