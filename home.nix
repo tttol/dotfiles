@@ -1,28 +1,33 @@
 { config, pkgs, ... }: {
-  home.username = "tttol";
-  home.homeDirectory = "/Users/tttol";
-  home.stateVersion = "24.05";
+    home.username = "tttol";
+    home.homeDirectory = "/Users/tttol";
+    home.stateVersion = "24.05";
 
-  # Neovim
-  # home.file.".config/nvim" = {
-  #   source = ./config/nvim;
-  #   recursive = true;
-  # };
+# Neovim
+# home.file.".config/nvim" = {
+#   source = ./config/nvim;
+#   recursive = true;
+# };
 
-  # WezTerm
-  home.file.".wezterm.lua" = {
-    source = ./config/wezterm/.wezterm.lua;
-  };
+    # WezTerm
+    home.file.".wezterm.lua" = {
+        source = ./config/wezterm/.wezterm.lua;
+    };
 
-  # Zsh
-  home.file.".zshrc" = {
-    source = ./config/zsh/.zshrc;
-  };
+    # zsh
+    home.file.".zshrc" = {
+        source = ./config/zsh/.zshrc;
+    };
 
-  # Starship
-  home.file.".config/starship.toml" = {
-    source = ./config/starship/starship.toml;
-  };
+    # Starship
+    home.file.".config/starship.toml" = {
+        source = ./config/starship/starship.toml;
+    };
 
-  programs.home-manager.enable = true;
-}
+    # claude
+    home.file.".claude/CLAUDE.md" = {
+        source = ./config/claude/CLAUDE.md;
+    };
+
+    programs.home-manager.enable = true;
+   }
