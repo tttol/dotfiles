@@ -8,3 +8,4 @@ claude/stats-cache.json
 claude/statsig/*
 claude/todos/*
 .DS_Store
+result

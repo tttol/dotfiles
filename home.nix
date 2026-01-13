@@ -11,7 +11,7 @@
 
   # WezTerm
   home.file.".wezterm.lua" = {
-    source = ./config/wezterm/wezterm.lua;
+    source = ./config/wezterm/.wezterm.lua;
   };
 
   # Zsh
