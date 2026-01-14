@@ -115,19 +115,3 @@ home-manager generations
 /nix/store/xxxxx-home-manager-generation/activate
 ```
 
-## Structure
-
-```
-dotfiles/
-├── flake.nix                 # Nix flake configuration
-├── flake.lock                # Dependency versions (tracked by Git)
-├── home.nix                  # Home Manager configuration
-├── config/
-│   ├── nvim/                 # Neovim configuration
-│   ├── wezterm/              # WezTerm configuration
-│   ├── zsh/                  # Zsh configuration
-│   └── starship/             # Starship prompt configuration
-└── plan/                     # Implementation plans
-
-```
-
