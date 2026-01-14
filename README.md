@@ -6,8 +6,6 @@ A personal dotfiles repository for managing configuration files in macOS environ
 
 This repository centralizes configurations for editors, terminals, shells, and development tools, making it easy to rebuild environments and maintain backups.
 
-**Management Approach**: Configuration files only (packages are managed separately via Homebrew)
-
 ## Prerequisites
 
 - Nix with flakes support
@@ -76,23 +74,13 @@ All files should be symlinks pointing to `/nix/store/...`
 
 ## Daily Updates
 
-### Updating Configuration Files
+### Adding or Updating Configuration Files
 
 When you modify configuration files:
 
 ```bash
-cd ~/Documents/workspace/dotfiles
-
-# Edit configuration files
-vim config/nvim/init.lua
-vim config/zsh/.zshrc
-
 # Apply changes
 home-manager switch --flake .
-
-# Or
-nix build .#homeConfigurations.tttol.activationPackage
-./result/activate
 ```
 
 ### Updating Dependencies (nixpkgs, home-manager)
@@ -113,36 +101,6 @@ home-manager switch --flake .
 git add flake.lock
 git commit -m "Update flake dependencies"
 git push
-```
-
-### Adding New Configuration Files
-
-1. Add file to `config/` directory
-2. Edit `home.nix` to add `home.file` entry
-3. Apply changes
-
-Example:
-
-```bash
-# Add new config file
-cp ~/.gitconfig config/git/.gitconfig
-
-# Edit home.nix
-vim home.nix
-```
-
-Add to `home.nix`:
-
-```nix
-home.file.".gitconfig" = {
-  source = ./config/git/.gitconfig;
-};
-```
-
-Apply:
-
-```bash
-home-manager switch --flake .
 ```
 
 ## Rollback
