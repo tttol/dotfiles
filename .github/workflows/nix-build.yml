@@ -4,8 +4,16 @@ on:
   pull_request:
     types: [opened, synchronize, closed]
     branches: '*'
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - '.github/workflows/nix-build.yml'
   push:
     branches: [main]
+    paths:
+      - '**.nix'
+      - 'flake.lock'
+      - '.github/workflows/nix-build.yml'
 
 jobs:
   flake-check:
