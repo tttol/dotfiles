@@ -13,7 +13,8 @@ This repository centralizes configurations for editors, terminals, shells, and d
 - Nix with flakes support
 - Git
 
-## Initial Setup
+<details>
+<summary><h2>Initial Setup</h2></summary>
 
 ### 1. Install Nix
 
@@ -70,6 +71,8 @@ ls -la ~/.config/starship.toml
 ```
 
 All files should be symlinks pointing to `/nix/store/...`
+
+</details>
 
 ## Daily Updates
 
