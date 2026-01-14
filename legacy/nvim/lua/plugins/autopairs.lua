@@ -2,8 +2,10 @@ return {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
     config = function()
-        require('nvim-autopairs').setup({
+        local npairs = require('nvim-autopairs')
+        npairs.setup({
             check_ts = true,
+            map_cr = false,
             ts_config = {
                 lua = { 'string' },
                 javascript = { 'string', 'template_string' },
@@ -20,21 +22,18 @@ return {
                 highlight_grey = 'Comment'
             },
         })
-        
-        -- Force autopairs keymaps after LSP
-        vim.api.nvim_create_autocmd("User", {
-            pattern = "LazyVimStarted",
-            callback = function()
-                vim.schedule(function()
-                    local autopairs = require('nvim-autopairs')
-                    autopairs.setup({})
-                    
-                    -- Force re-setup keymaps
-                    local Rule = require('nvim-autopairs.rule')
-                    autopairs.clear_rules()
-                    autopairs.add_rules(require('nvim-autopairs.rules.basic'))
-                end)
-            end,
-        })
+        local remap = vim.api.nvim_set_keymap
+        local npairs_ok, _ = pcall(require, 'nvim-autopairs')
+        if npairs_ok then
+            _G.MUtils = {}
+            MUtils.CR = function()
+                if vim.fn.pumvisible() ~= 0 then
+                    return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
+                else
+                    return npairs.autopairs_cr()
+                end
+            end
+            remap('i', '<CR>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
+        end
     end
 }
