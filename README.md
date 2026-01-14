@@ -1,5 +1,7 @@
 # dotfiles
 
+[![CI](https://github.com/tttol/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/tttol/dotfiles/actions/workflows/ci.yml)
+
 ## Overview
 
 A personal dotfiles repository for managing configuration files in macOS environment using Nix + Home Manager.
@@ -113,5 +115,38 @@ home-manager generations
 
 # Rollback to specific generation
 /nix/store/xxxxx-home-manager-generation/activate
+```
+
+## CI/CD
+
+GitHub Actions automatically tests the configuration on every push and pull request.
+
+### Test Jobs
+
+1. **Flake Check** (Ubuntu)
+   - Validates flake.nix syntax
+   - Checks flake metadata
+   - Runs on Linux for fast feedback
+
+2. **Build on macOS** (macOS)
+   - Builds the actual Home Manager configuration
+   - Verifies the activation package
+   - Tests on macOS to match target platform
+
+3. **Format Check** (Ubuntu)
+   - Checks Nix files formatting
+   - Optional: Will not fail the build
+
+### Running Tests Locally
+
+```bash
+# Check flake syntax
+nix flake check
+
+# Build configuration
+nix build .#homeConfigurations.tttol.activationPackage
+
+# Format check (requires nixpkgs-fmt)
+nix run nixpkgs#nixpkgs-fmt -- --check *.nix
 ```
 
