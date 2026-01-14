@@ -1,42 +1,152 @@
 # dotfiles
 
+[![CI](https://github.com/tttol/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/tttol/dotfiles/actions/workflows/ci.yml)
+
 ## Overview
 
-A personal dotfiles repository for managing configuration files in macOS environment.
+A personal dotfiles repository for managing configuration files in macOS environment using Nix + Home Manager.
 
 This repository centralizes configurations for editors, terminals, shells, and development tools, making it easy to rebuild environments and maintain backups.
 
-## Structure
+## Prerequisites
 
-Each directory contains configuration files for corresponding tools:
+- Nix with flakes support
+- Git
 
-- **Editors**: Vim, Neovim, Visual Studio Code
-- **Shell**: Zsh, Starship
-- **Terminal**: WezTerm
-- **Development Tools**: Claude Code
-- **Others**: Obsidian, Google Japanese Input, Squid
+<details>
+<summary><h2>Initial Setup</h2></summary>
 
-## Syncing Configurations
-
-### Sync All
-
-Copy all configuration files from home directory to repository:
+### 1. Install Nix
 
 ```bash
-./sync_all_configs.sh
+curl -L https://nixos.org/nix/install | sh
 ```
 
-### Sync Individual
-
-Each directory has a `copy_*_config.sh` script for individual syncing:
+### 2. Enable Flakes
 
 ```bash
-cd nvim
-./copy_nvim_config.sh
+mkdir -p ~/.config/nix
+cat > ~/.config/nix/nix.conf << 'EOF'
+experimental-features = nix-command flakes
+max-jobs = auto
+EOF
 ```
 
-## Usage
+### 3. Clone Repository
 
-1. **Update Configuration**: Edit actual configuration files in home directory
-2. **Sync**: Run corresponding copy script to reflect changes in repository
-3. **Version Control**: Commit and push with git
+```bash
+git clone https://github.com/tttol/dotfiles.git ~/Documents/workspace/dotfiles
+cd ~/Documents/workspace/dotfiles
+```
+
+### 4. Backup Existing Configurations
+
+```bash
+mv ~/.config/nvim ~/.config/nvim.backup
+mv ~/.wezterm.lua ~/.wezterm.lua.backup
+mv ~/.zshrc ~/.zshrc.backup
+mv ~/.config/starship.toml ~/.config/starship.toml.backup
+```
+
+### 5. Apply Configuration
+
+```bash
+nix build .#homeConfigurations.tttol.activationPackage
+./result/activate
+```
+
+Or install home-manager and use:
+
+```bash
+nix run home-manager/master -- switch --flake .
+```
+
+### 6. Verify
+
+```bash
+ls -la ~/.config/nvim
+ls -la ~/.wezterm.lua
+ls -la ~/.zshrc
+ls -la ~/.config/starship.toml
+```
+
+All files should be symlinks pointing to `/nix/store/...`
+
+</details>
+
+## Daily Updates
+
+### Adding or Updating Configuration Files
+
+When you modify configuration files:
+
+```bash
+# Apply changes
+home-manager switch --flake .
+```
+
+### Updating Dependencies (nixpkgs, home-manager)
+
+```bash
+cd ~/Documents/workspace/dotfiles
+
+# Update all dependencies
+nix flake update
+
+# Update specific dependency
+nix flake lock --update-input nixpkgs
+
+# Apply updated dependencies
+home-manager switch --flake .
+
+# Commit updated flake.lock
+git add flake.lock
+git commit -m "Update flake dependencies"
+git push
+```
+
+## Rollback
+
+Home Manager tracks generations, allowing you to rollback to previous configurations:
+
+```bash
+# List generations
+home-manager generations
+
+# Rollback to specific generation
+/nix/store/xxxxx-home-manager-generation/activate
+```
+
+## CI/CD
+
+GitHub Actions automatically tests the configuration on every push and pull request.
+
+### Test Jobs
+
+1. **Flake Check** (Ubuntu)
+   - Validates flake.nix syntax
+   - Checks flake metadata
+   - Runs on Linux for fast feedback
+
+2. **Build on macOS** (macOS)
+   - Builds the actual Home Manager configuration
+   - Verifies the activation package
+   - Tests on macOS to match target platform
+
+3. **Format Check** (Ubuntu)
+   - Checks Nix files formatting
+   - Optional: Will not fail the build
+
+### Running Tests Locally
+
+```bash
+# Check flake syntax
+nix flake check
+
+# Build configuration
+nix build .#homeConfigurations.tttol.activationPackage
+
+# Format check (requires nixpkgs-fmt)
+nix run nixpkgs#nixpkgs-fmt -- --check *.nix
+```
+
