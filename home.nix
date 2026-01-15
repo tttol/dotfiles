@@ -3,7 +3,7 @@
     home.homeDirectory = "/Users/tttol";
     home.stateVersion = "24.05";
 
-# Neovim
+    # Neovim
     home.file.".config/nvim" = {
       source = ./config/nvim;
       recursive = true;
