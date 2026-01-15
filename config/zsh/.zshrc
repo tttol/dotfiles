@@ -14,12 +14,10 @@ source "${ZINIT_HOME}/zinit.zsh"
 # ALIAS
 ########################################################
 
-alias history='history -100'
 alias sync-fork="~/Documents/workspace/sync-fork.sh"
 alias nv='nvim'
 mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
 alias ll='eza --icons -al'
-alias ll2='eza --icons -al -T -L 2'
 alias lg='lazygit'
 alias history='eval "$(fc -l -n 1  | fzf)"'
 
@@ -107,26 +105,11 @@ preexec() {
     echo -ne '\e[5 q'
 }
 
-################################################################################################################
-
 ########################################################
-# ENV
+# LOCAL SETTINGS
 ########################################################
 
-# homebrew
-export HOMEBREW_PREFIX="/opt/homebrew"
-export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
-export HOMEBREW_REPOSITORY="/opt/homebrew"
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"
-export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
-export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
-
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-25.jdk/Contents/Home
-export SPRING_PROFILES_ACTIVE=local
-export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:$HOME/jdt-language-server-1.55.0-202511271007/bin"
-export JDTLS_JVM_ARGS="-javaagent:$HOME/.local/share/java/lombok.jar"
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
 
 ########################################################
 # TOOL

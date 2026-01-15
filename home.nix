@@ -4,10 +4,10 @@
     home.stateVersion = "24.05";
 
 # Neovim
-# home.file.".config/nvim" = {
-#   source = ./config/nvim;
-#   recursive = true;
-# };
+    home.file.".config/nvim" = {
+      source = ./config/nvim;
+      recursive = true;
+    };
 
     # WezTerm
     home.file.".wezterm.lua" = {
