@@ -1,6 +1,6 @@
 # dotfiles
 
-[![CI](https://github.com/tttol/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/tttol/dotfiles/actions/workflows/ci.yml)
+[![Automation test for Nix](https://github.com/tttol/dotfiles/actions/workflows/nix-build.yml/badge.svg)](https://github.com/tttol/dotfiles/actions/workflows/nix-build.yml)
 
 ## Overview
 

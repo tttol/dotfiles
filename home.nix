@@ -3,11 +3,11 @@
     home.homeDirectory = "/Users/tttol";
     home.stateVersion = "24.05";
 
-# Neovim
-# home.file.".config/nvim" = {
-#   source = ./config/nvim;
-#   recursive = true;
-# };
+    # Neovim
+    home.file.".config/nvim" = {
+      source = ./config/nvim;
+      recursive = true;
+    };
 
     # WezTerm
     home.file.".wezterm.lua" = {
