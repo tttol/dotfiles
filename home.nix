@@ -1,6 +1,6 @@
-{ config, pkgs, ... }: {
-    home.username = "tttol";
-    home.homeDirectory = "/Users/tttol";
+{ config, pkgs, username, ... }: {
+    home.username = username;
+    home.homeDirectory = "/Users/${username}";
     home.stateVersion = "24.05";
 
     # Neovim

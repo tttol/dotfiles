@@ -1,5 +1,5 @@
 {
-  description = "tttol's dotfiles managed by Home Manager";
+  description = "dotfiles managed by Home Manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -9,10 +9,15 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }: {
-    homeConfigurations."tttol" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-      modules = [ ./home.nix ];
+  outputs = { nixpkgs, home-manager, ... }:
+    let
+      username = builtins.getEnv "USER";
+      system = builtins.currentSystem;
+    in {
+      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        modules = [ ./home.nix ];
+        extraSpecialArgs = { inherit username; };
+      };
     };
-  };
 }

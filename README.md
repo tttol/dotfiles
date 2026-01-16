@@ -51,14 +51,14 @@ mv ~/.config/starship.toml ~/.config/starship.toml.backup
 ### 5. Apply Configuration
 
 ```bash
-nix build .#homeConfigurations.tttol.activationPackage
+nix build .#homeConfigurations.$USER.activationPackage --impure
 ./result/activate
 ```
 
 Or install home-manager and use:
 
 ```bash
-nix run home-manager/master -- switch --flake .
+nix run home-manager/master -- switch --flake . --impure
 ```
 
 ### 6. Verify
@@ -82,7 +82,7 @@ When you modify configuration files:
 
 ```bash
 # Apply changes
-home-manager switch --flake .
+home-manager switch --flake . --impure
 ```
 
 ### Updating Dependencies (nixpkgs, home-manager)
@@ -97,7 +97,7 @@ nix flake update
 nix flake lock --update-input nixpkgs
 
 # Apply updated dependencies
-home-manager switch --flake .
+home-manager switch --flake . --impure
 
 # Commit updated flake.lock
 git add flake.lock
