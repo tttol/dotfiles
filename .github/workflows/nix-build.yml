@@ -47,5 +47,5 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@v7
 
       - name: Build Home Manager configuration
-        run: nix build .#homeConfigurations.tttol.activationPackage
+        run: nix build .#homeConfigurations.$USER.activationPackage --impure
 
