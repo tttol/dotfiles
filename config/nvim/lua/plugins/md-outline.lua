@@ -1,5 +1,10 @@
 return {
     'tttol/md-outline.nvim'
+  config = function()
+    require("md-outline").setup({
+        auto_open = false
+    })
+  end,
 }
 -- return {
 --   dir = "~/Documents/workspace/md-outline.nvim",
