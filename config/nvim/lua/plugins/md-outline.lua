@@ -1,8 +1,8 @@
 return {
-    'tttol/md-outline.nvim'
+  'tttol/md-outline.nvim',
   config = function()
     require("md-outline").setup({
-        auto_open = false
+      auto_open = false
     })
   end,
 }
