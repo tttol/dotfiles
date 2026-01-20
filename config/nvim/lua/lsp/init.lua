@@ -179,8 +179,8 @@ local lsp_names = {}
 -- 上記2行分の設定をlsp/*.luaを満たす全てのluaファイルに対して実行する
 -- https://zenn.dev/kawarimidoll/books/6064bf6f193b51/viewer/018161
 for file, ftype in vim.fs.dir(current_dir) do
-    -- end with `.lua` except init.lua
-    if ftype == 'file' and vim.endswith(file, '.lua') and file ~= 'init.lua' then
+    -- end with `.lua` except init.lua (include symlinks for Home Manager support)
+    if (ftype == 'file' or ftype == 'link') and vim.endswith(file, '.lua') and file ~= 'init.lua' then
         local lsp_name = file:sub(1, -5) -- fname without '.lua'
         local ok, result = pcall(require, 'lsp.' .. lsp_name)
         if ok then
