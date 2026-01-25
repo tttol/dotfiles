@@ -8,6 +8,7 @@ return {
     opts = {},
     config = function()
         require('render-markdown').setup({
+            file_types = { 'markdown', 'mdx' },
             render_modes = true,
             heading = {
                 enabled = false,

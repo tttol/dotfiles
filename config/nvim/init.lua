@@ -67,6 +67,13 @@ vim.api.nvim_create_autocmd("InsertEnter", {
     end,
 })
 
+-- Register mdx as a filetype and use markdown parser
+vim.filetype.add({
+  extension = {
+    mdx = 'mdx',
+  },
+})
+vim.treesitter.language.register('markdown', 'mdx')
 ------------------------------------------------
 --- COLOR
 ------------------------------------------------
@@ -195,7 +202,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- [IME] Turn off IME when normal mode
 vim.api.nvim_create_autocmd("InsertLeave", {
-    pattern = "*.md",
+    pattern = "*",
     callback = function()
         vim.fn.system("osascript -e 'tell application \"System Events\" to key code 102'")
     end,

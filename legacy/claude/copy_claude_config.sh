@@ -1,5 +1,0 @@
-#!/bin/bash
-find . -maxdepth 1 ! -name 'copy_claude_config.sh' ! -name '.' -exec rm -rf {} +
-cp -r ~/.claude/CLAUDE.md ./CLAUDE.md
-cp -r ~/.claude/settings.json ./settings.json
-cp -r ~/.claude/commands/ ./commands/
