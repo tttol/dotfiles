@@ -32,6 +32,8 @@ require("lazy").setup({
     install = { colorscheme = { "habamax" } },
     -- automatically check for plugin updates
     checker = { enabled = true },
+    -- Use writable path for lockfile (Nix store symlink is read-only)
+    lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
     -- disable luarocks support to fix the error
     rocks = {
         enabled = false,
