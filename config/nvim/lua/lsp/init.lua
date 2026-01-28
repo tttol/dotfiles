@@ -108,6 +108,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         local opts = { buffer = args.buf, noremap = true, silent = true }
         vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float,
             vim.tbl_extend("force", opts, { desc = "Show diagnostics" }))
+        vim.keymap.set("n", "gd", function()
             vim.api.nvim_create_autocmd("CursorMoved", {
                 once = true,
                 callback = function()
