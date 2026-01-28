@@ -8,3 +8,5 @@
 - Always make the implementation simple. You should not install unnecessary additional libraries or write unnecessarily complex conditional logic. First, consider whether you can achieve the requirements using only the standard library, and only consider installing additional libraries when it's genuinely difficult to accomplish with the standard library alone.
 - Write immutable code wherever possible. Variables should not be reassigned after their initial declaration.
 - You should not use global variables. You had better use small-scoped and immutable variables as possible.
+- Avoid over-splitting logic into too many methods. As a rule of thumb, a method should be at least 5 lines long. Anything shorter generally doesn't need to be extracted. However, you may still create a shorter method if it significantly improves code readability.
+- When introducing a new library, always use the latest version. For libraries already in use, please do not upgrade the version without prior consultation.
