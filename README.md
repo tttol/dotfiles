@@ -81,6 +81,8 @@ All files should be symlinks pointing to `/nix/store/...`
 When you modify configuration files:
 
 ```bash
+# Add your changes to git
+git add [files you add or update]
 # Apply changes
 home-manager switch --flake . --impure
 ```

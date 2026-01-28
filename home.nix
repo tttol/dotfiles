@@ -29,5 +29,12 @@
         source = ./config/claude/CLAUDE.md;
     };
 
+    # lazygit
+    home.file."Library/Application Support/lazygit" = {
+        source = ./config/lazygit;
+        recursive = true;
+    };
+
     programs.home-manager.enable = true;
+    # /Library/Application Support
    }
