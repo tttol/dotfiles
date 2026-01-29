@@ -174,6 +174,7 @@ vim.keymap.set('t', '<C-z>', toggle_floating_terminal, { noremap = true, silent 
 vim.cmd('cnoreabbrev fzf FzfLua')
 vim.cmd('cnoreabbrev ff FzfLua files')
 vim.cmd('cnoreabbrev fg FzfLua grep')
+vim.cmd('cnoreabbrev fb FzfLua buffers')
 
 -- oil.nvim
 vim.cmd('cnoreabbrev oil Oil')
