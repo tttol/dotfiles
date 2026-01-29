@@ -2,5 +2,6 @@ customCommands:
   - key: "<c-g>"
     context: "files"
     description: "Generate AI commit message"
-    command: "\"$HOME/Library/Application Support/lazygit/ai-commit-msg.sh\" | git commit -e -F -"
+    # command: "\"$HOME/Library/Application Support/lazygit/ai-commit-msg.sh\" | git commit -e -F -"
+    command: "\"$HOME/Library/Application Support/lazygit/ai-commit-msg-gemini.sh\" | git commit -e -F -"
     output: terminal
