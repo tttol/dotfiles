@@ -2,7 +2,7 @@
 
 set -e
 
-DIFF=$(git diff --cached | head -n 100)
+DIFF=$(git diff --cached | head -n 300)
 if [ -z "$DIFF" ]; then
     echo "Error: No staged changes found" >&2
     exit 1
