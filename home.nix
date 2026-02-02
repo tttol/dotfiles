@@ -34,6 +34,16 @@
         source = ./config/lazygit;
         recursive = true;
     };
+    
+    # skills
+    home.file.".claude/skills" = {
+        source = ./config/skills;
+        recursive = true;
+    };
+    home.file.".codex/skills" = {
+        source = ./config/skills;
+        recursive = true;
+    };
 
     programs.home-manager.enable = true;
     # /Library/Application Support
