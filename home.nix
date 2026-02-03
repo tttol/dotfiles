@@ -41,7 +41,7 @@
         recursive = true;
     };
     home.file.".codex/skills" = {
-        source = ./config/skills;
+        source = ./skills;
         recursive = true;
     };
 
