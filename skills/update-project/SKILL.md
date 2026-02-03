@@ -7,7 +7,7 @@ description: "Updates or saves the project's CLAUDE.md or AGENTS.md files based 
 A skill that updates the project's CLAUDE.md or AGENTS.md based on Pull Request content.
 
 ## Usage
-Receives a PR number or PR URL from the user and reflects its content in the documentation.
+Receives a PR number or PR URL from the user and reflects its content in the documentation. Use `gh` command when viewing a PR. For example, `gh pr view 37`.
 
 ### Input Format
 Specify the PR in one of the following formats:

@@ -10,6 +10,9 @@ A code reviewer for all luanguage.(Java, JavaScript, TypeScript, Python, Rust an
 - When implementing a new code or refactoring an existing code
 - When reviewing
 
+## Viewing a PR
+Use `gh` command when viewing a PR. For example, `gh pr view 37`.
+
 ## Output
 Outputs the result of review with markdown file. The file name must be `ai-review-result_[the name of current git branch]_[yyyyMMdd].md`.The format is here.
 
