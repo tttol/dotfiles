@@ -37,13 +37,13 @@
     
     # skills
     home.file.".claude/skills" = {
-        source = ./skills;
+        source = ./config/skills;
         recursive = true;
     };
-    home.file.".codex/skills" = {
-        source = ./skills;
-        recursive = true;
-    };
+    # home.file.".codex/skills" = {
+    #     source = ./skills;
+    #     recursive = true;
+    # };
 
     programs.home-manager.enable = true;
     # /Library/Application Support
