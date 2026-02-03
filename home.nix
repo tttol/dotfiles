@@ -37,7 +37,7 @@
     
     # skills
     home.file.".claude/skills" = {
-        source = ./config/skills;
+        source = ./skills;
         recursive = true;
     };
     home.file.".codex/skills" = {
