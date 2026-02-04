@@ -1,6 +1,6 @@
 ---
-name: test code
-description: The guideline about test code. Triggres on: `test code`, `testing`, `test case`, `テストコード`, `テストケース`, `テスト`.
+name: "test code"
+description: "The guideline about test code. Triggres on: `test code`, `testing`, `test case`, `テストコード`, `テストケース`, `テスト`."
 ---
 # Test Code
 The guideline for test code. This guideline can be applied for all languages.

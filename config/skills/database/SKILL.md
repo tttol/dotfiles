@@ -1,5 +1,5 @@
 ---
-name: database
+name: "database"
 descripotion: "The guideline of when implementing a SQL and designing a database architecture. Triggers on: 'sql', 'database', 'DB', 'MySQL', 'PostgreSQL', 'Oracle', 'INSERT', 'SELECT'."
 ---
 # Database
