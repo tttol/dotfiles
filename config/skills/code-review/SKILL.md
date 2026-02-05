@@ -50,9 +50,11 @@ Save this result file to {repository root directory}/docs/reviews/. If nothing, 
 ## Checklist
 Review with these perspectives.
 
-### Quality & Architecture
+### Quality
 - **Strict Compliance:** Adhere to all guidelines defined in `CLAUDE.md` or `AGENTS.md`.
 - **Open-Closed Principle:** Follow the 'O' in SOLID; ensure entities are open for extension but closed for modification.
+- **Type Safety**: Use proper type for each variable.
+- **Error handling**: Use appropriate exception-based error handling and avoid swallowing thrown exceptions.
 
 ### Security
 - **Secret Management:** Do not hard-code secrets (API keys, credentials). Use environment variables or a secure parameter store.
@@ -240,4 +242,116 @@ class OrderProcessor {
     return Math.round((subtotal + taxAmount) * 100) / 100;
   }
 }
+```
+### Transaction
+- Apply transaction context manager pattern. Database transactions should be scoped appropriately, rather than being applied to every single SQL statement. For example,the annotation of `@Transactional` in Java or the decorator of `@contextmanager` in Python. Here is sample code.
+```java
+// ===== BAD CASE =====
+// Each SQL statement has its own transaction - no atomicity guarantee
+@Service
+public class OrderServiceBad {
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private InventoryRepository inventoryRepository;
+    
+    // No @Transactional - each repository call runs in its own transaction
+    public void createOrder(Order order) {
+        orderRepository.save(order);           // Transaction 1
+        inventoryRepository.decreaseStock(order.getProductId(), order.getQuantity()); // Transaction 2
+    }
+}
+
+// ===== GOOD CASE =====
+// All operations within a single transaction - atomicity guaranteed
+@Service
+public class OrderServiceGood {
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private InventoryRepository inventoryRepository;
+    
+    @Transactional // All operations share the same transaction
+    public void createOrder(Order order) {
+        orderRepository.save(order);
+        inventoryRepository.decreaseStock(order.getProductId(), order.getQuantity());
+    }
+}
+```
+
+```python
+# ===== BAD CASE =====
+# Manual commit after each operation - no atomicity
+class OrderServiceBad:
+    def __init__(self, session: Session):
+        self.session = session
+    
+    def create_order(self, order_data: dict) -> None:
+        # Each operation commits independently
+        order = Order(**order_data)
+        self.session.add(order)
+        self.session.commit()  # Commit 1
+        
+        self.session.query(Inventory).filter_by(
+            product_id=order.product_id
+        ).update({"stock": Inventory.stock - order.quantity})
+        self.session.commit()  # Commit 2
+        
+        payment = Payment(order_id=order.id, amount=order.total)
+        self.session.add(payment)
+        self.session.commit()  # Commit 3
+        # If payment processing fails after commit, previous changes persist!
+
+
+# ===== GOOD CASE =====
+# Using context manager pattern for proper transaction scoping
+from contextlib import contextmanager
+from sqlalchemy.orm import Session
+
+@contextmanager
+def transaction_scope(session_factory):
+    """Provide a transactional scope around a series of operations."""
+    session = session_factory()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
+class OrderServiceGood:
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
+    
+    def create_order(self, order_data: dict) -> Order:
+        # All operations within a single transaction
+        with transaction_scope(self.session_factory) as session:
+            order = Order(**order_data)
+            session.add(order)
+            
+            session.query(Inventory).filter_by(
+                product_id=order.product_id
+            ).update({"stock": Inventory.stock - order.quantity})
+            
+            payment = Payment(order_id=order.id, amount=order.total)
+            session.add(payment)
+            
+            # Commit happens automatically at end of 'with' block
+            # Rollback happens automatically if any exception occurs
+            return order
+    
+    def get_order_with_details(self, order_id: int) -> Order:
+        # Read-only operation - still benefits from consistent snapshot
+        with transaction_scope(self.session_factory) as session:
+            return session.query(Order).options(
+                joinedload(Order.items),
+                joinedload(Order.payment)
+            ).filter_by(id=order_id).first()
 ```
