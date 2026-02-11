@@ -45,6 +45,12 @@
     #     recursive = true;
     # };
 
+    # git
+    home.file.".claude/git" = {
+        source = ./config/git;
+        recursive = true;
+    };
+
     programs.home-manager.enable = true;
     # /Library/Application Support
    }
