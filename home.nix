@@ -46,7 +46,7 @@
     # };
 
     # git
-    home.file.".claude/git" = {
+    home.file.".config/git" = {
         source = ./config/git;
         recursive = true;
     };
