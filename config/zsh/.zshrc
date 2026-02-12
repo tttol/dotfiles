@@ -129,4 +129,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 eval "$(zoxide init zsh)"
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude .claude --exclude .cache --exclude node_modules --exclude .venv --exclude .next --exclude Library/CloudStorage --exclude Library/Caches --exclude .local/share --exclude .local/state'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude .claude --exclude .cache --exclude node_modules --exclude .venv --exclude .next --exclude Library/CloudStorage --exclude Library/Caches --exclude .local/share --exclude .local/state --exclude Library'
