@@ -58,7 +58,7 @@ nvf() {
 nvd() {
     local dir
     cd
-    dir=$(fd --type d --hidden --exclude .git | fzf \
+    dir=$(fd | fzf \
         --preview 'eza --tree --level=2 --icons --git {} 2>/dev/null || tree -L 2 {} 2>/dev/null || ls -la {}' \
         --preview-window=right:60%)
     [ -n "$dir" ] && cd "$dir" && nvim .
