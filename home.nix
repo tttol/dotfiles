@@ -51,6 +51,11 @@
         recursive = true;
     };
 
+    # ghostty
+    home.file.".config/ghostty" = {
+        source = ./config/ghostty;
+        recursive = true;
+    };
     programs.home-manager.enable = true;
     # /Library/Application Support
    }

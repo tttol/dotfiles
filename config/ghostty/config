@@ -1,0 +1,73 @@
+
+# ===========================================
+# Ghostty Configuration
+# Migrated from WezTerm (wezterm.lua)
+# ===========================================
+# Location: ~/.config/ghostty/config
+
+# -------------------------------------------
+# GENERAL
+# -------------------------------------------
+window-width = 120
+window-height = 28
+theme = TokyoNight
+
+# Font settings
+font-size = 15
+font-family = CommitMono Nerd Font
+font-family = Hiragino Sans
+
+# Open links with Cmd+Click (default behavior on macOS)
+link-url = true
+
+# -------------------------------------------
+# TAB
+# -------------------------------------------
+# NOTE: Ghostty does not support custom tab styling like WezTerm's
+# Lua-based format-tab-title. The tab bar uses native OS styling.
+# The following are the closest equivalents:
+
+# Show tab bar even with a single tab
+window-show-tab-bar = auto
+
+# Tab bar position (top)
+# On macOS, the tab bar is always at the top (native behavior)
+
+# -------------------------------------------
+# SPLITS (PANE)
+# -------------------------------------------
+
+# Vertical split: Cmd+' (split into left and right)
+keybind = cmd+apostrophe=new_split:right
+
+# Horizontal split: Cmd+Shift+' (split into top and bottom)
+keybind = cmd+shift+apostrophe=new_split:down
+
+# Navigate between panes (vim-style with Cmd)
+# NOTE: cmd+h is reserved by macOS to hide the window.
+#       You may need to disable it in System Settings > Keyboard > Shortcuts > App Shortcuts
+#       or remap "Hide Ghostty" to another key.
+keybind = cmd+h=goto_split:left
+keybind = cmd+l=goto_split:right
+keybind = cmd+k=goto_split:top
+keybind = cmd+j=goto_split:bottom
+
+# Close pane: Cmd+W
+keybind = cmd+w=close_surface
+
+# Resize panes with arrow keys
+# resize_split takes direction and pixel amount (e.g., resize_split:left,10)
+keybind = cmd+left=resize_split:left,20
+keybind = cmd+right=resize_split:right,20
+keybind = cmd+up=resize_split:up,20
+keybind = cmd+down=resize_split:down,20
+
+# -------------------------------------------
+# ADDITIONAL USEFUL SETTINGS
+# -------------------------------------------
+
+# Equalize all split sizes
+keybind = cmd+shift+equal=equalize_splits
+
+# Dim unfocused splits for better visual clarity
+unfocused-split-opacity = 0.85
