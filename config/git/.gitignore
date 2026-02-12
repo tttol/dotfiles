@@ -1,12 +1,12 @@
 .envrc
 .DS_Store
 .claude/
-.cache
-node_modules
-dist
-build
+.cache/
+node_modules/
+dist/
+build/
 target
-cdk.out
+cdk.out/
 __pycache__
 .venv
 .terraform
