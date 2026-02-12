@@ -64,16 +64,6 @@ nvd() {
     [ -n "$dir" ] && cd "$dir" && nvim .
 }
 
-cdf() {
-    local dir
-    cd
-    dir=$(fd --type d --hidden --exclude .git | fzf \
-        --preview 'eza --tree --level=2 --icons --git {} 2>/dev/null || tree -L 2 {} 2>/dev/null || ls -la {}' \
-        --preview-window=right:60%)
-    [ -n "$dir" ] && z "$dir"
-}
-
-
 ########################################################
 # KEYBIND
 ########################################################
@@ -129,4 +119,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 eval "$(zoxide init zsh)"
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude .claude --exclude .cache --exclude node_modules --exclude .venv --exclude .next --exclude Library/CloudStorage --exclude Library/Caches --exclude .local/share --exclude .local/state --exclude Library --exclude .vscode --exclude .cursor --exclude Movies'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude .claude --exclude .cache --exclude node_modules --exclude .venv --exclude .next --exclude .local/share --exclude .local/state --exclude Library --exclude .vscode --exclude .cursor --exclude Movies'
