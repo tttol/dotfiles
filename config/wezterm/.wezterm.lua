@@ -9,7 +9,6 @@ local config = wezterm.config_builder()
 config.initial_cols = 120
 config.initial_rows = 28
 config.color_scheme = 'Tokyo Night'
-config.window_decorations = 'RESIZE'
 
 --- Open link by mouse click
 config.mouse_bindings = {
