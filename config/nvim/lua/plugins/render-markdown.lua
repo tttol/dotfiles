@@ -46,6 +46,10 @@ return {
                 },
                 custom = {},
             },
+            code = {
+                enabled = true,
+                disable_background = { 'diff' },
+            },
             indent = {
                 enabled = true,
                 skip_heading = false,
