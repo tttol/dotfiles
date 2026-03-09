@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = "markdown",
+    pattern = { "markdown", "mdx" },
     callback = function()
         vim.bo.formatoptions = vim.bo.formatoptions .. "ro"
         vim.bo.comments = "b:-,b:*,b:+,b:1."
