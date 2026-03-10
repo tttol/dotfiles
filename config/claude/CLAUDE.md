@@ -117,3 +117,6 @@ for (int i = 0; i < 10; i++) {
 // GOOD
 List<Integer> list = IntStream.range(0, 10).boxed().toList();
 ```
+
+### Test Code
+Use test-code/SKILL.md which is agent skill for implmenting test code. This skill defines a guidline of test code.
