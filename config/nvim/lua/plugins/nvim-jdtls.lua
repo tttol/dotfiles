@@ -105,6 +105,11 @@ return {
                   enabled = true,
                 },
               },
+              cleanup = {
+                actionsOnSave = {
+                  "addFinalModifier",
+                },
+              },
             },
           },
           init_options = {
