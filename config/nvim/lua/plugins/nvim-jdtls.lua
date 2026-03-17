@@ -105,18 +105,37 @@ return {
                   enabled = true,
                 },
               },
-              cleanup = {
-                actionsOnSave = {
-                  "addFinalModifier",
-                },
-              },
             },
           },
           init_options = {
             bundles = {},
           },
-          on_attach = function(client, bufnr)
+          on_attach = function(_, bufnr)
             jdtls.setup_dap({ hotcodereplace = "auto" })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              callback = function()
+                local params = {
+                  textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+                  range = {
+                    start = { line = 0, character = 0 },
+                    ["end"] = { line = vim.api.nvim_buf_line_count(bufnr) - 1, character = 0 },
+                  },
+                  context = { only = { "source.cleanup" }, diagnostics = {} },
+                }
+                local responses = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 3000)
+                if not responses then return end
+                for _, response in pairs(responses) do
+                  for _, action in pairs(response.result or {}) do
+                    if action.edit then
+                      vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+                    elseif action.command then
+                      vim.lsp.buf.execute_command(action.command)
+                    end
+                  end
+                end
+              end,
+            })
           end,
         }
 
