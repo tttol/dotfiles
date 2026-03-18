@@ -28,6 +28,9 @@
     home.file.".claude/CLAUDE.md" = {
         source = ./config/claude/CLAUDE.md;
     };
+    home.file.".claude/settings.json" = {
+        source = ./config/claude/settings.json;
+    };
 
     # lazygit
     home.file."Library/Application Support/lazygit" = {
