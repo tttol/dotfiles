@@ -33,6 +33,7 @@
     };
     home.file.".claude/statusline.sh" = {
         source = ./config/claude/statusline.sh;
+        executable = true;
     };
 
     # lazygit
