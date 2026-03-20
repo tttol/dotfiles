@@ -6,6 +6,9 @@
       "Write",
       "Bash(cp:*)",
       "Bash(mv:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)"
     ],
@@ -42,6 +45,10 @@
       }
     ]
   },
+  "statusline": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  }
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true,

@@ -194,6 +194,10 @@ vim.cmd('cnoreabbrev lg LazyGit')
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "json",
     callback = function ()
+        vim.bo.shiftwidth = 2
+        vim.bo.tabstop = 2
+        vim.bo.softtabstop = 2
+        vim.bo.expandtab = true
         -- normal mode
         vim.api.nvim_set_keymap('n', '<leader>jq', ':%!jq .<CR>', {buffer = true, desc = "Format JSON strings"})
         -- visual mode
