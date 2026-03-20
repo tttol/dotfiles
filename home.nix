@@ -31,6 +31,9 @@
     home.file.".claude/settings.json" = {
         source = ./config/claude/settings.json;
     };
+    home.file.".claude/statusline.sh" = {
+        source = ./config/claude/statusline.sh;
+    };
 
     # lazygit
     home.file."Library/Application Support/lazygit" = {
