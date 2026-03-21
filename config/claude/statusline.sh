@@ -6,63 +6,42 @@ PURPLE='\033[35m'
 GREEN='\033[32m'
 ORANGE='\033[38;5;208m'
 RESET='\033[0m'
+FULL_BAR="██████████"
+EMPTY_BAR="░░░░░░░░░░"
 
-# Git branch (skip optional locks for safety)
-branch=$(git -C "$(echo "$input" | jq -r '.workspace.current_dir // empty')" \
-  --no-optional-locks branch --show-current 2>/dev/null)
-if [ -n "$branch" ]; then
-  git_info="${PURPLE} $branch${RESET}"
-else
-  git_info="${PURPLE}(no git)${RESET}"
+# Single jq call: extract all values + pre-compute rounded integers in jq
+IFS=$'\t' read -r current_dir used_int used_filled five_int five_filled week_int week_filled < <(
+  printf '%s' "$input" | jq -r '[
+    (.workspace.current_dir // ""),
+    (if .context_window.used_percentage != null then (.context_window.used_percentage | round | tostring) else "" end),
+    (if .context_window.used_percentage != null then (.context_window.used_percentage / 10 | round | tostring) else "" end),
+    (if .rate_limits.five_hour.used_percentage != null then (.rate_limits.five_hour.used_percentage | round | tostring) else "" end),
+    (if .rate_limits.five_hour.used_percentage != null then (.rate_limits.five_hour.used_percentage / 10 | round | tostring) else "" end),
+    (if .rate_limits.seven_day.used_percentage != null then (.rate_limits.seven_day.used_percentage | round | tostring) else "" end),
+    (if .rate_limits.seven_day.used_percentage != null then (.rate_limits.seven_day.used_percentage / 10 | round | tostring) else "" end)
+  ] | join("\t")'
+)
+
+# Git branch
+branch=$(git -C "$current_dir" --no-optional-locks branch --show-current 2>/dev/null)
+git_info="${PURPLE} ${branch:-(no git)}${RESET}"
+
+# Context window bar (string slicing — no loop, no subprocess)
+ctx_info=""
+if [ -n "$used_int" ]; then
+  ctx_bar="${FULL_BAR:0:$used_filled}${EMPTY_BAR:0:$((10 - used_filled))}"
+  ctx_info="${GREEN} Context[${ctx_bar}]${used_int}%${RESET}"
 fi
 
-# Context window progress bar
-used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-if [ -n "$used_pct" ]; then
-  ctx_filled=$(printf "%.0f" "$(echo "$used_pct / 10" | bc -l)")
-  ctx_bar=""
-  for i in $(seq 1 10); do
-    if [ "$i" -le "$ctx_filled" ]; then
-      ctx_bar="${ctx_bar}█"
-    else
-      ctx_bar="${ctx_bar}░"
-    fi
-  done
-  ctx_pct_int=$(printf "%.0f" "$used_pct")
-  ctx_info="${GREEN} Context[${ctx_bar}]${ctx_pct_int}%${RESET}"
-else
-  ctx_info=""
-fi
-
-# Rate limit progress bars (5h and 7d)
-five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
-week_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+# Rate limit bars
 rate_info=""
-if [ -n "$five_pct" ]; then
-  five_filled=$(printf "%.0f" "$(echo "$five_pct / 10" | bc -l)")
-  five_bar=""
-  for i in $(seq 1 10); do
-    if [ "$i" -le "$five_filled" ]; then
-      five_bar="${five_bar}█"
-    else
-      five_bar="${five_bar}░"
-    fi
-  done
-  five_int=$(printf "%.0f" "$five_pct")
-  rate_info="${rate_info}${ORANGE} 5h[${five_bar}]${five_int}%${RESET}"
+if [ -n "$five_int" ]; then
+  five_bar="${FULL_BAR:0:$five_filled}${EMPTY_BAR:0:$((10 - five_filled))}"
+  rate_info="${ORANGE} 5h[${five_bar}]${five_int}%${RESET}"
 fi
-if [ -n "$week_pct" ]; then
-  week_filled=$(printf "%.0f" "$(echo "$week_pct / 10" | bc -l)")
-  week_bar=""
-  for i in $(seq 1 10); do
-    if [ "$i" -le "$week_filled" ]; then
-      week_bar="${week_bar}█"
-    else
-      week_bar="${week_bar}░"
-    fi
-  done
-  week_int=$(printf "%.0f" "$week_pct")
+if [ -n "$week_int" ]; then
+  week_bar="${FULL_BAR:0:$week_filled}${EMPTY_BAR:0:$((10 - week_filled))}"
   rate_info="${rate_info}${ORANGE} 7d[${week_bar}]${week_int}%${RESET}"
 fi
 
-echo -e "${git_info}${ctx_info}${rate_info}"
+printf '%b\n' "${git_info}${ctx_info}${rate_info}"

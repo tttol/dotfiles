@@ -7,8 +7,13 @@
       "Bash(cp:*)",
       "Bash(mv:*)",
       "Bash(cat:*)",
+      "Bash(bat:*)",
       "Bash(ls:*)",
+      "Bash(eza:*)",
       "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(fd:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)"
     ],

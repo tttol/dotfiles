@@ -9,6 +9,8 @@
 - You should not use global variables. You had better use small-scoped and immutable variables as possible.
 - When introducing a new library, always use the latest version. For libraries already in use, please do not upgrade the version without prior consultation.
 
+# Commands
+- Use modern alternatives for common commands: `eza` instead of `ls`, `fd` instead of `find`, `rg` instead of `grep`, and `bat` instead of `cat`. 
 
 ## Code Style Preferences
 ### Method Policy
