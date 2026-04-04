@@ -23,13 +23,13 @@ PRがマージされることによって既存コードベースにどういっ
 
 ### English
 ```md
-Summary
+## Summary
 Provide a brief, concise overview of the changes included in this PR. Use this section to explain how merging these changes will impact the existing codebase.
 
-Background
+## Background
 Explain the context or motivation behind these changes. You can pull and adapt relevant details from JIRA tickets or other documentation.
 
-Key Changes
+## Key Changes
 Highlight the top three files with the most significant changes and explain the modifications at the source-code level. If the PR affects four or more files, focusing on the top three is sufficient.
 ```
 
