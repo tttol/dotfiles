@@ -243,6 +243,49 @@ class OrderProcessor {
   }
 }
 ```
+- **Parameterized Test**: Prefer a parameterized test to the test which has a lot of assertions. Here is sample code:
+```java
+// ❌BAD
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class StringUtilsTest {
+
+    @Test
+    void testIsPalindrome_MultipleAssertions() {
+        // 大量のアサーションを1つのメソッドで行っている
+        assertEquals(true, StringUtils.isPalindrome("racecar"));
+        assertEquals(true, StringUtils.isPalindrome("radar"));
+        assertEquals(true, StringUtils.isPalindrome("level"));
+        assertEquals(false, StringUtils.isPalindrome("hello"));
+        assertEquals(false, StringUtils.isPalindrome("java"));
+    }
+}
+```
+
+```java
+// ✅GOOD
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+class StringUtilsTest {
+
+    @ParameterizedTest
+    @CsvSource({
+        "racecar, true",
+        "radar,   true",
+        "level,   true",
+        "hello,   false",
+        "java,    false"
+    })
+    void testIsPalindrome(String input, boolean expected) {
+        // テストロジックは1行。データが追加されてもロジックをいじる必要がない
+        assertEquals(expected, StringUtils.isPalindrome(input));
+    }
+}
+```
+
 ### Transaction
 - Apply transaction context manager pattern. Database transactions should be scoped appropriately, rather than being applied to every single SQL statement. For example,the annotation of `@Transactional` in Java or the decorator of `@contextmanager` in Python. Here is sample code.
 ```java
