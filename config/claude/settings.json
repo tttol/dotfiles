@@ -54,6 +54,7 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
+  "effortLevel": "high",
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true,
