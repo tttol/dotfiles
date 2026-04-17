@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay /System/Library/Sounds/Glass.aiff"
+            "command": "osascript -e 'display notification \"Claude has finished task.\" with title \"cc done!\" sound name \"Glass\"'"
           }
         ]
       }
