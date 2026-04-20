@@ -1,4 +1,17 @@
-{ config, pkgs, username, ... }: {
+{ config, pkgs, lib, username, ... }:
+let
+  claudeCodeVersion = "2.1.114"; # Set to a version string like "1.2.3" to pin, or null for latest
+  claude-code = if claudeCodeVersion == null
+    then pkgs.claude-code
+    else pkgs.claude-code.overrideAttrs (old: rec {
+      version = claudeCodeVersion;
+      src = pkgs.fetchurl {
+        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
+        hash = lib.fakeHash; # Replace with actual hash after first failed build
+      };
+      npmDepsHash = lib.fakeHash; # Replace with actual hash after second failed build
+    });
+in {
     home.username = username;
     home.homeDirectory = "/Users/${username}";
     home.stateVersion = "24.05";
@@ -63,6 +76,7 @@
         source = ./config/ghostty;
         recursive = true;
     };
+    home.packages = [ claude-code ];
     programs.home-manager.enable = true;
     # /Library/Application Support
    }
