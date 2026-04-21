@@ -58,7 +58,14 @@ nix build .#homeConfigurations.$USER.activationPackage --impure
 Or install home-manager and use:
 
 ```bash
-nix run home-manager/master -- switch --flake . --impure
+# Build without claude-code
+home-manager switch --flake . --impure
+
+# First installation of claude-code
+nix profile install .#claude-code --impure
+
+# Update the claude-code version
+nix profile upgrade '.*claude-code.*' --impure
 ```
 
 ### 6. Verify
