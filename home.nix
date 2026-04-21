@@ -35,13 +35,6 @@
         source = ./config/claude/statusline.sh;
         executable = true;
     };
-
-    # lazygit
-    home.file."Library/Application Support/lazygit" = {
-        source = ./config/lazygit;
-        recursive = true;
-    };
-    
     # skills
     home.file.".claude/skills" = {
         source = ./config/skills;
@@ -51,6 +44,12 @@
     #     source = ./skills;
     #     recursive = true;
     # };
+
+    # lazygit
+    home.file."Library/Application Support/lazygit" = {
+        source = ./config/lazygit;
+        recursive = true;
+    };
 
     # git
     home.file.".config/git" = {
@@ -63,6 +62,7 @@
         source = ./config/ghostty;
         recursive = true;
     };
+
     programs.home-manager.enable = true;
     # /Library/Application Support
-   }
+}

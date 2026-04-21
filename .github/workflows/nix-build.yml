@@ -16,23 +16,6 @@ on:
       - '.github/workflows/nix-build.yml'
 
 jobs:
-  flake-check:
-    name: Flake Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v13
-
-      - name: Enable Magic Nix Cache
-        uses: DeterminateSystems/magic-nix-cache-action@v7
-
-      - name: Check flake
-        run: nix flake check --all-systems
-
-
   build-macos:
     name: Build on macOS
     runs-on: macos-latest

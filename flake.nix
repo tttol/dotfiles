@@ -13,11 +13,17 @@
     let
       username = builtins.getEnv "USER";
       system = builtins.currentSystem;
+      pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
     in {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
+        inherit pkgs;
         modules = [ ./home.nix ];
         extraSpecialArgs = { inherit username; };
+      };
+
+      packages.${system}.claude-code = import ./claude-code.nix {
+        inherit pkgs;
+        lib = nixpkgs.lib;
       };
     };
 }

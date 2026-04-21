@@ -13,6 +13,47 @@ This repository centralizes configurations for editors, terminals, shells, and d
 - Nix with flakes support
 - Git
 
+## Daily Updates
+
+### Adding or Updating Configuration Files
+
+When you modify configuration files:
+
+```bash
+# Add your changes to git
+git add [files you add or update]
+
+# Build without claude-code
+home-manager switch --flake . --impure
+
+# First installation of claude-code
+nix profile install .#claude-code --impure
+
+# Update the claude-code version
+nix profile upgrade '.*claude-code.*' --impure
+```
+
+### Updating Dependencies (nixpkgs, home-manager)
+
+```bash
+cd ~/Documents/workspace/dotfiles
+
+# Update all dependencies
+nix flake update
+
+# Update specific dependency
+nix flake lock --update-input nixpkgs
+
+# Apply updated dependencies
+home-manager switch --flake . --impure
+
+# Commit updated flake.lock
+git add flake.lock
+git commit -m "Update flake dependencies"
+git push
+```
+
+## Installation
 <details>
 <summary><h2>Initial Setup</h2></summary>
 
@@ -58,7 +99,14 @@ nix build .#homeConfigurations.$USER.activationPackage --impure
 Or install home-manager and use:
 
 ```bash
-nix run home-manager/master -- switch --flake . --impure
+# Build without claude-code
+home-manager switch --flake . --impure
+
+# First installation of claude-code
+nix profile install .#claude-code --impure
+
+# Update the claude-code version
+nix profile upgrade '.*claude-code.*' --impure
 ```
 
 ### 6. Verify
@@ -74,38 +122,6 @@ All files should be symlinks pointing to `/nix/store/...`
 
 </details>
 
-## Daily Updates
-
-### Adding or Updating Configuration Files
-
-When you modify configuration files:
-
-```bash
-# Add your changes to git
-git add [files you add or update]
-# Apply changes
-home-manager switch --flake . --impure
-```
-
-### Updating Dependencies (nixpkgs, home-manager)
-
-```bash
-cd ~/Documents/workspace/dotfiles
-
-# Update all dependencies
-nix flake update
-
-# Update specific dependency
-nix flake lock --update-input nixpkgs
-
-# Apply updated dependencies
-home-manager switch --flake . --impure
-
-# Commit updated flake.lock
-git add flake.lock
-git commit -m "Update flake dependencies"
-git push
-```
 
 ## Rollback
 
