@@ -12,7 +12,7 @@
   outputs = { nixpkgs, home-manager, ... }:
     let
       username = builtins.getEnv "USER";
-      system = builtins.currentSystem;
+      system = "aarch64-darwin";
       pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
     in {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
