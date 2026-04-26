@@ -96,3 +96,6 @@ eval "$(zoxide init zsh)"
 
 # fzf
 export FZF_DEFAULT_COMMAND="fd --type d --hidden --follow --exclude .git --exclude .claude --exclude .cache --exclude node_modules --exclude .venv --exclude .next --exclude .local/share --exclude .local/state --exclude Library --exclude .vscode --exclude .cursor --exclude $HOME/Movies"
+
+# neovim
+export PATH="$HOME/nvim-macos-arm64/bin/nvim:$PATH"
