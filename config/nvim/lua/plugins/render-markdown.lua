@@ -11,7 +11,7 @@ return {
             file_types = { 'markdown', 'mdx' },
             render_modes = true,
             heading = {
-                enabled = true,
+                enabled = false,
                 render_modes = false,
                 atx = true,
                 setext = true,
@@ -23,7 +23,7 @@ return {
                 left_pad = 0,
                 right_pad = 0,
                 min_width = 0,
-                border = false,
+                border = true,
                 border_virtual = false,
                 border_prefix = false,
                 above = '',
@@ -55,8 +55,5 @@ return {
                 skip_heading = false,
             },
         })
-        for i = 1, 6 do
-            vim.api.nvim_set_hl(0, 'RenderMarkdownH' .. i, { fg = '#569cd6', bold = true })
-        end
     end
 }
