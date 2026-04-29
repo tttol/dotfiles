@@ -1,6 +1,6 @@
 return {
     "nvim-treesitter/nvim-treesitter-context",
-    enabled = false,
+    enabled = true,
     opts = {
         max_lines = 3,
     },
