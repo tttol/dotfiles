@@ -12,6 +12,7 @@ This repository centralizes configurations for editors, terminals, shells, and d
 
 - Nix with flakes support
 - Git
+- Rust with Cargo
 
 ## Daily Updates
 
@@ -73,14 +74,25 @@ max-jobs = auto
 EOF
 ```
 
-### 3. Clone Repository
+### 3. Install tree-sitter CLI
+
+Neovim uses tree-sitter parsers for syntax highlighting and folding.
+Install `tree-sitter-cli` so nvim-treesitter can build parsers.
+
+```bash
+cargo install tree-sitter-cli
+```
+
+ref: https://github.com/tree-sitter/tree-sitter/blob/master/crates/cli/README.md
+
+### 4. Clone Repository
 
 ```bash
 git clone https://github.com/tttol/dotfiles.git ~/Documents/workspace/dotfiles
 cd ~/Documents/workspace/dotfiles
 ```
 
-### 4. Backup Existing Configurations
+### 5. Backup Existing Configurations
 
 ```bash
 mv ~/.config/nvim ~/.config/nvim.backup
@@ -89,7 +101,7 @@ mv ~/.zshrc ~/.zshrc.backup
 mv ~/.config/starship.toml ~/.config/starship.toml.backup
 ```
 
-### 5. Apply Configuration
+### 6. Apply Configuration
 
 ```bash
 nix build .#homeConfigurations.$USER.activationPackage --impure
@@ -109,7 +121,7 @@ nix profile install .#claude-code --impure
 nix profile upgrade '.*claude-code.*' --impure
 ```
 
-### 6. Verify
+### 7. Verify
 
 ```bash
 ls -la ~/.config/nvim

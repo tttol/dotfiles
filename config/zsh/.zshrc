@@ -20,7 +20,7 @@ mkfile() { mkdir -p "$(dirname "$1")" && touch "$1"; }
 alias ll='eza --icons -al'
 alias lg='lazygit'
 # alias history='eval "$(fc -l -n 1  | fzf)"'
-alias codexn="nix run github:tttol/nix-codex --refresh"
+alias ncodex="nix run github:tttol/nix-codex --refresh"
 
 ########################################################
 # COMPLETION
