@@ -1,5 +1,7 @@
 # Migration to Neovim 0.12.2
 2026/04/30: I have migrated Neovim 0.11.x -> 0.12.2. This is the ADR of it.
+<br/>
+See also: https://github.com/tttol/dotfiles/pull/5
 
 ## Difference Between Neovim 0.11.x and 0.12.2
 
