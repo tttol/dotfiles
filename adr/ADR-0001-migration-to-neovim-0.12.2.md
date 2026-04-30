@@ -43,8 +43,6 @@ Neovim provides the runtime features that use Treesitter data.
 - Build parser binaries.
 - Install parser/query files for every language automatically.
 - Keep parser/query files updated.
-- Provide sticky code context UI like `nvim-treesitter-context`.
-- Provide Markdown rendering UI like `render-markdown.nvim`.
 
 
 Those responsibilities are handled by external tools and plugins.
