@@ -34,9 +34,10 @@ In this configuration, Neovim itself does the following:
 - Reads installed parsers and queries from the runtime path.
 - Applies highlight, fold, and injection behavior based on installed query files.
 
-Neovim does not automatically install every parser for every language. It also does not build parser binaries from parser source code by itself.
+> [!IMPORTANT]
+> Neovim does not automatically install every parser for every language. It also does not build parser binaries from parser source code by itself.
 
-## What Neovim Itself Does Not Do
+## What Neovim Itself Does NOT Do
 
 Neovim does not manage the full parser/query lifecycle.
 
