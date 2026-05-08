@@ -8,6 +8,8 @@ return {
             "markdown",
             "markdown_inline",
             "html",
+            "html_tag",
+            "superhtml",
             "typescript",
             "tsx",
             "javascript",
@@ -45,6 +47,7 @@ return {
         vim.api.nvim_create_user_command("TSInstallConfigured", function()
             require("nvim-treesitter").install(parsers)
         end, {})
+        vim.cmd.TSInstallConfigured()
         vim.api.nvim_create_autocmd("FileType", {
             pattern = filetypes,
             callback = function()
