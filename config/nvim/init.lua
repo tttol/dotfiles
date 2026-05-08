@@ -103,6 +103,49 @@ vim.api.nvim_create_autocmd("ColorScheme", {
         vim.api.nvim_set_hl(0, "@lsp.type.annotation.java", { fg = "#bfbc80" })
         vim.api.nvim_set_hl(0, "@keyword.import.java", { fg = "#ff9e64" })
 
+        -- JavaScript and TypeScript syntax colors
+        local script_languages = { "javascript", "typescript", "tsx" }
+        local script_lsp_filetypes = {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+        }
+        for _, language in ipairs(script_languages) do
+            vim.api.nvim_set_hl(0, "@keyword." .. language, { fg = "#bb9af7", italic = true })
+            vim.api.nvim_set_hl(0, "@keyword.import." .. language, { fg = "#ff9e64", italic = true })
+            vim.api.nvim_set_hl(0, "@keyword.type." .. language, { fg = "#2ac3de", italic = true })
+            vim.api.nvim_set_hl(0, "@keyword.modifier." .. language, { fg = "#bb9af7", italic = true })
+            vim.api.nvim_set_hl(0, "@keyword.operator." .. language, { fg = "#bb9af7" })
+            vim.api.nvim_set_hl(0, "@keyword.return." .. language, { fg = "#bb9af7", italic = true })
+            vim.api.nvim_set_hl(0, "@operator." .. language, { fg = "#bb9af7" })
+            vim.api.nvim_set_hl(0, "@type." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@type.builtin." .. language, { fg = "#2ac3de", italic = true })
+            vim.api.nvim_set_hl(0, "@constructor." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@function." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@function.call." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@function.method." .. language, { fg = "#e0af68" })
+            vim.api.nvim_set_hl(0, "@function.method.call." .. language, { fg = "#e0af68" })
+            vim.api.nvim_set_hl(0, "@variable." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@variable.parameter." .. language, { fg = "#e0af68" })
+            vim.api.nvim_set_hl(0, "@variable.member." .. language, { fg = "#9ece6a" })
+            vim.api.nvim_set_hl(0, "@module." .. language, { fg = "#7aa2f7" })
+        end
+        for _, language in ipairs(script_lsp_filetypes) do
+            vim.api.nvim_set_hl(0, "@lsp.type.keyword." .. language, { fg = "#bb9af7", italic = true })
+            vim.api.nvim_set_hl(0, "@lsp.type.type." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@lsp.type.class." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@lsp.type.enum." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@lsp.type.interface." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@lsp.type.typeParameter." .. language, { fg = "#2ac3de" })
+            vim.api.nvim_set_hl(0, "@lsp.type.function." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@lsp.type.method." .. language, { fg = "#e0af68" })
+            vim.api.nvim_set_hl(0, "@lsp.type.variable." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@lsp.type.parameter." .. language, { fg = "#e0af68" })
+            vim.api.nvim_set_hl(0, "@lsp.type.property." .. language, { fg = "#9ece6a" })
+            vim.api.nvim_set_hl(0, "@lsp.type.namespace." .. language, { fg = "#7aa2f7" })
+            vim.api.nvim_set_hl(0, "@lsp.typemod.variable.readonly." .. language, { fg = "#7aa2f7" })
+        end
         -- Highlight current row number
         vim.opt.cursorline = true
         vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#ff9e64', bold = true })
