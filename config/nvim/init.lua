@@ -229,6 +229,12 @@ vim.cmd('cnoreabbrev lazy Lazy')
 
 -- lazygit
 vim.cmd('cnoreabbrev lg LazyGit')
+
+-- diffview.nvim
+vim.cmd('cnoreabbrev do DiffviewOpen')
+vim.cmd('cnoreabbrev dc DiffviewClose')
+vim.cmd('cnoreabbrev df DiffviewFileHistory')
+
 ------------------------------------------------
 --- AUTOCMD
 ------------------------------------------------
