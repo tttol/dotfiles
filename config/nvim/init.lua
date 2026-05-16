@@ -15,7 +15,7 @@ vim.opt.smartcase = true          -- Override ignorecase if search pattern conta
 -- Indent
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "javascript", "typescript",
-    "javascriptreact", "typescriptreact" },
+    "javascriptreact", "typescriptreact", "java" },
     callback = function()
         vim.bo.shiftwidth = 2
         vim.bo.tabstop = 2
