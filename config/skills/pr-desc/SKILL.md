@@ -17,8 +17,6 @@ PRがマージされることによって既存コードベースにどういっ
 ## 背景
 変更の裏側にある背景や事情を説明する。JIRAチケットなどから情報を取得して加工する。
 
-## 変更内容
-変更を加えたファイルのうち変更行数が多いものを上位3つほど取り上げ、変更内容をソースコードレベルで説明する。差分のあるファイルが4ファイル以上ある場合は上位3つだけでよい。
 ```
 
 ### English
@@ -29,8 +27,6 @@ Provide a brief, concise overview of the changes included in this PR. Use this s
 ## Background
 Explain the context or motivation behind these changes. You can pull and adapt relevant details from JIRA tickets or other documentation.
 
-## Key Changes
-Highlight the top three files with the most significant changes and explain the modifications at the source-code level. If the PR affects four or more files, focusing on the top three is sufficient.
 ```
 
 ## Rule

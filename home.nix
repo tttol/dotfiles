@@ -40,10 +40,10 @@
         source = ./config/skills;
         recursive = true;
     };
-    # home.file.".codex/skills" = {
-    #     source = ./skills;
-    #     recursive = true;
-    # };
+    home.file.".codex/skills" = {
+        source = ./config/skills;
+        recursive = true;
+    };
 
     # lazygit
     home.file."Library/Application Support/lazygit" = {
