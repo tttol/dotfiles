@@ -11,16 +11,18 @@ The output template is here:
 
 ```
 # IMPORTANT MAIL
-### xxx@gmal.com（5件）
+### XXX / xxx@gmal.com（5件）
 〜〜の件について連絡がありました。内容は〜〜〜
 
-### yyy@gmal.com（5件）
+### YYY / yyy@gmal.com（5件）
 〜〜の件について連絡がありました。内容は〜〜〜
 
 # GENERAL MAIL
-### xxx@gmal.com（5件）
+### XXX / xxx@gmal.com（5件）
 〜〜の件について連絡がありました。内容は〜〜〜
 
-### yyy@gmal.com（5件）
+### YYY / yyy@gmal.com（5件）
 〜〜の件について連絡がありました。内容は〜〜〜
 ```
+
+`XXX` and `YYY` are sender name.
