@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recursive Code Review"
+  short_description: "PRの重大なレビュー指摘を修正し再レビューまで反復します"
+  default_prompt: "Use $recursive-code-review to review the current PR and fix all CRITICAL and HIGH findings."
