@@ -42,6 +42,7 @@ Resolve severe findings on the current pull request through repeated review and 
 - Include tests and their corresponding production changes in the same commit.
 - Do not create an empty commit when a review has no CRITICAL or HIGH findings.
 - Do not stage an entire dirty worktree with `git add .` or `git add -A`.
+- Do not stage any `docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md` file.
 
 ## Stop Conditions
 
