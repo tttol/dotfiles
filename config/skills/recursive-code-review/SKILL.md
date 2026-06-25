@@ -9,7 +9,7 @@ Resolve severe findings on the current pull request through repeated review and 
 
 ## Workflow
 
-1. Create a Codex goal for the full recursive review task before making changes. Use an objective such as `Review the current PR, fix all CRITICAL and HIGH findings, verify, commit, push, and repeat until no severe findings remain`. Do not set a token budget unless the user explicitly requested one.
+1. Create a Codex goal for the full recursive review task before making changes. Use an objective such as `Review the current PR and fix all CRITICAL and HIGH findings, verified by the latest docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md report showing zero severe findings and by focused checks passing, while preserving unrelated user changes and avoiding force-pushes. Between iterations, verify each severe finding, make the smallest coherent fix, test it, commit, push, and re-review. If blocked, report the blocker, evidence gathered, remaining severe findings, and the input needed to continue`. Do not set a token budget unless the user explicitly requested one.
 2. Read the repository's `AGENTS.md`, `CLAUDE.md`, and relevant local instructions.
 3. Inspect `git status --short --branch` and record pre-existing changes. Never discard, overwrite, stage, or commit unrelated user changes.
 4. Run `gh pr view --json number,title,url,headRefName,baseRefName` to identify the pull request for the current branch.
