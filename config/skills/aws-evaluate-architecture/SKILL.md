@@ -13,7 +13,8 @@ Use this skill to turn a rough architecture idea or requirement into an evidence
 
 - Use `tool_search` to discover AWS documentation MCP tools before researching.
 - Prefer tools exposed by `awslabs.aws-documentation-mcp-server@latest` for AWS documentation lookup, page retrieval, and recommendations.
-- If the AWS documentation MCP server is unavailable, say so clearly and ask whether to continue with web search or local knowledge. Do not present undocumented AWS claims as verified.
+- Treat only official AWS documentation retrieved through `awslabs.aws-documentation-mcp-server@latest` as primary information for AWS resources. Do not treat external articles, blogs, vendor pages, Q&A sites, or general web search results as primary information.
+- If the AWS documentation MCP server is unavailable, say so clearly and ask whether to stop or continue with explicitly unverified fallback research. Do not present fallback information, web articles, or local knowledge as verified AWS facts.
 - Use the Goal feature for non-trivial investigations. Create one concrete goal for the user's architecture question, keep it active while cycling, and mark it complete only after the final feasibility answer is delivered.
 
 ## Goal Cycle
@@ -39,7 +40,7 @@ Treat the Goal as complete only when the final answer classifies feasibility, ci
 3. Verify with AWS documentation
    - Search official AWS docs through the AWS documentation MCP server for each critical claim.
    - Verify service capabilities, integration support, regional or account limitations, quotas, consistency or durability behavior, security controls, pricing dimensions, and operational tradeoffs.
-   - Prefer current AWS service documentation over blog posts. Use architecture blogs only for patterns, not as the sole source of service capability.
+   - Use only official AWS documentation returned by the AWS documentation MCP server as evidence. Do not use AWS blogs, external articles, community posts, or general web pages as sources for architecture decisions.
 
 4. Evaluate feasibility
    - Classify the idea as `実現可能`, `条件付きで実現可能`, `代替案推奨`, or `実現困難`.
@@ -59,6 +60,9 @@ Treat the Goal as complete only when the final answer classifies feasibility, ci
 
 ## Research Discipline
 
+- Verify all AWS resource claims against official AWS documentation through `awslabs.aws-documentation-mcp-server@latest`.
+- Do not use external articles, blogs, community posts, or general web pages as inputs for AWS resource evaluation unless the user explicitly asks for non-official context. Even then, keep them separate from the official-docs-based conclusion.
+- If AWS official documentation does not confirm a claim, label it as unverified or omit it from the recommendation.
 - Verify all time-sensitive AWS facts. AWS service capabilities, quotas, regions, names, and pricing change often.
 - Separate verified facts from inferences. Use wording such as `AWS Docsで確認済み` and `推論` when it helps the user see confidence levels.
 - Do not over-design. Start with the smallest AWS architecture that satisfies the requirement, then add components only for stated reliability, security, scale, or compliance needs.
