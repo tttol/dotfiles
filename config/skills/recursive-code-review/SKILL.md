@@ -1,6 +1,6 @@
 ---
 name: recursive-code-review
-description: Review the current GitHub pull request with the code-review skill, fix reported CRITICAL and HIGH findings, run focused tests, commit and push the fixes, and repeat until no CRITICAL or HIGH findings remain. Use when asked to autonomously resolve severe PR review findings through repeated review-fix-commit-push cycles while allowing MEDIUM and LOW findings to remain.
+description: Review the current GitHub pull request with the code-review skill, manage the long-running loop with a Codex goal, fix reported CRITICAL and HIGH findings, run focused tests, commit and push the fixes, and repeat until no CRITICAL or HIGH findings remain. Use when asked to autonomously resolve severe PR review findings through repeated review-fix-commit-push cycles while allowing MEDIUM and LOW findings to remain.
 ---
 
 # Recursive Code Review
@@ -9,11 +9,20 @@ Resolve severe findings on the current pull request through repeated review and 
 
 ## Workflow
 
-1. Read the repository's `AGENTS.md`, `CLAUDE.md`, and relevant local instructions.
-2. Inspect `git status --short --branch` and record pre-existing changes. Never discard, overwrite, stage, or commit unrelated user changes.
-3. Run `gh pr view --json number,title,url,headRefName,baseRefName` to identify the pull request for the current branch.
-4. Verify that the checked-out branch is the PR head branch. Stop and explain the mismatch instead of modifying another branch.
-5. Repeat the review and repair cycle until the completion condition is met.
+1. Create a Codex goal for the full recursive review task before making changes. The goal is always: `Continue reviewing, fixing, committing, and pushing the current PR until the latest docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md report has zero CRITICAL and zero HIGH findings. Verify each severe finding before editing, make the smallest coherent fix, run focused checks, commit the fix, push the branch, and re-review. Preserve unrelated user changes, never force-push, and if blocked, report the blocker, evidence gathered, remaining severe findings, and the input needed to continue`. Do not set a token budget unless the user explicitly requested one.
+2. Read the repository's `AGENTS.md`, `CLAUDE.md`, and relevant local instructions.
+3. Inspect `git status --short --branch` and record pre-existing changes. Never discard, overwrite, stage, or commit unrelated user changes.
+4. Run `gh pr view --json number,title,url,headRefName,baseRefName` to identify the pull request for the current branch.
+5. Verify that the checked-out branch is the PR head branch. Stop and explain the mismatch instead of modifying another branch.
+6. Repeat the review and repair cycle until the completion condition is met.
+
+## Goal Handling
+
+- Keep the Codex goal active for the entire review-fix-review loop, including across continuations or context compaction.
+- Before each resumed cycle, check the current goal and continue from the last known PR state instead of restarting from scratch.
+- Mark the goal complete only after the latest review report has zero CRITICAL and zero HIGH findings, required verification passed, and any repair commits were pushed.
+- Mark the goal blocked only when the same stop condition has repeated for at least three consecutive goal turns and no meaningful progress remains possible without user input or an external-state change.
+- When marking a budgeted goal complete, include the final token usage reported by the goal tool in the completion report.
 
 ## Review And Repair Cycle
 
@@ -55,7 +64,7 @@ Stop without claiming completion when:
 - Required verification cannot be made to pass after investigation.
 - The same severe finding persists because the requested behavior conflicts with repository requirements.
 
-Report the exact blocker, the remaining severe findings, tests run, commits created, and push status.
+Keep the Codex goal active if meaningful progress can continue. If the same blocker satisfies the Goal Handling blocked criteria, mark the goal blocked and report the exact blocker, the remaining severe findings, tests run, commits created, and push status.
 
 ## Completion Report
 
