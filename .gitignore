@@ -10,3 +10,4 @@ claude/todos/*
 .DS_Store
 result
 config/nvim/lazy-lock.json
+config/skills/.system/*
