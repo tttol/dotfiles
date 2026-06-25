@@ -18,7 +18,13 @@ Use this skill to turn a rough architecture idea or requirement into an evidence
 
 ## Goal Cycle
 
-For every non-trivial request, create a Goal whose objective names the user's desired outcome. Run this cycle until the answer is sufficiently supported:
+For every non-trivial request, create a Goal with this objective format:
+
+```text
+Determine whether <user's desired architecture or requirement> can be implemented with AWS resources, and deliver an evidence-backed recommendation using official AWS documentation.
+```
+
+Treat the Goal as complete only when the final answer classifies feasibility, cites the AWS documentation evidence used, and states the recommended next validation step. Run this cycle until the answer is sufficiently supported:
 
 1. Capture intent
    - Restate the user's business or technical goal in one sentence.
