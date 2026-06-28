@@ -1,17 +1,17 @@
 ---
 name: video-subtitle-natural-cuts
-description: Add burned-in subtitles to a user-provided video from a script or transcript, with caption timing aligned to speech and line breaks chosen as a native English speaker would naturally read them. Use when Codex needs to subtitle short videos, create social-video captions, split long script lines into natural phrase-sized captions, preserve the original audio, and export a new MP4 rather than overwriting prior outputs.
+description: Add burned-in subtitles to a user-provided video from a script or transcript, with caption timing aligned to speech, Instagram-safe placement about 30% above the bottom edge, and line breaks chosen as a native English speaker would naturally read them. Use when Codex needs to subtitle short videos, create social-video captions, split long script lines into natural phrase-sized captions, preserve the original audio, and export a new MP4 rather than overwriting prior outputs.
 ---
 # Video Subtitle Natural Cuts
 ## Goal
-Create a new subtitled MP4 from a source video and a user-provided script. Burn captions into the video, keep the original audio, and choose caption units that feel natural to a native English speaker.
+Create a new subtitled MP4 from a source video and a user-provided script. Burn captions into the video, keep the original audio, place captions safely for Instagram-style uploads, and choose caption units that feel natural to a native English speaker.
 ## Workflow
 1. Inspect the video with `ffprobe` to confirm duration, orientation, resolution, audio stream, and codec details.
 2. Detect speech/silence with `ffmpeg -af silencedetect` when timing is not already supplied. Use the first non-silent point as the earliest caption start so opening captions do not appear before the speaker begins.
 3. Segment the script into natural caption units. Prefer short clauses and meaning groups over full sentences when a sentence is long.
-4. Create an ASS subtitle file. Use `PlayResX` and `PlayResY` matching the rendered orientation, and set readable white bold text with a black outline.
+4. Create an ASS subtitle file. Use `PlayResX` and `PlayResY` matching the rendered orientation, readable white bold text with a black outline, and a bottom margin of about 30% of the video height for Instagram-safe placement.
 5. Encode a new MP4 with subtitles burned in. Preserve the original audio stream content by mapping the primary audio stream and encoding to AAC for compatibility.
-6. Extract representative frames around important caption boundaries and visually verify no caption appears too early, too large, clipped, or awkwardly split.
+6. Extract representative frames around important caption boundaries and visually verify no caption appears too early, too large, clipped, too low for Instagram UI, or awkwardly split.
 7. Return only the new MP4 path from the outputs directory, and mention the key verification points.
 ## Natural Caption Splitting
 Prefer these splitting rules for English scripts:
@@ -21,6 +21,8 @@ Prefer these splitting rules for English scripts:
 - Avoid splitting inside fixed expressions, times, names, dates, or idioms unless the line would otherwise be too long.
 - Favor 1 to 2 lines per caption, with each line short enough to scan quickly on a phone screen.
 - If a sentence has a natural pause in the audio, align the split to that pause even when the text could fit as one caption.
+## Caption Position
+Default to Instagram-safe caption placement: set the ASS bottom margin to about 30% of the rendered video height. For a 1080x1920 vertical video, use `MarginV: 576`. Increase or decrease this only when the visual content requires it or the user asks for a different placement.
 ## Timing Guidance
 Use detected silence as a guide, not an absolute source of truth. If the user says a caption appears too early, move the start to the first audible speech frame. If the user asks for shorter cuts, split at natural phrase boundaries and keep each caption on screen long enough to read.
 ## ASS Subtitle Generation
@@ -35,7 +37,7 @@ Then run:
 ```bash
 python3 scripts/create_ass_subtitles.py segments.json subtitles.ass --width 1080 --height 1920
 ```
-Use `\N` inside `text` only when a deliberate two-line caption is needed.
+The script defaults to a bottom margin of 30% of `--height`. Override with `--margin-v` only when needed. Use `\N` inside `text` only when a deliberate two-line caption is needed.
 ## Encoding Pattern
 Use an output filename that does not overwrite a previous result unless the user explicitly asks for overwrite:
 ```bash
@@ -47,4 +49,4 @@ Always verify at least these frames:
 - Before the first caption start, to confirm no early caption appears.
 - Shortly after the first caption start, to confirm the opening caption appears when speech begins.
 - At each user-requested split point, to confirm the expected caption unit appears.
-- At the longest caption, to confirm text is not clipped and does not dominate the image.
+- At the longest caption, to confirm text is not clipped, does not dominate the image, and sits around 30% above the bottom edge.

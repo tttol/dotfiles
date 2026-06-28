@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chrome App Launchers"
+  short_description: "Create Raycast-friendly Chrome app launchers"
+  default_prompt: "Use $chrome-app-launchers to create Raycast-friendly launchers for Chrome apps on this Mac."
