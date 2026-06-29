@@ -1,18 +1,45 @@
 ---
 name: video-subtitle-natural-cuts
-description: Add burned-in subtitles to a user-provided video from a script or transcript, with caption timing aligned to speech, Instagram-safe placement about 30% above the bottom edge, and line breaks chosen as a native English speaker would naturally read them. Use when Codex needs to subtitle short videos, create social-video captions, split long script lines into natural phrase-sized captions, preserve the original audio, and export a new MP4 rather than overwriting prior outputs.
+description: Add burned-in subtitles to a user-provided video from a script, transcript, or automatically transcribed audio, preserving the spoken language without translation, with caption timing aligned to speech, Instagram-safe placement about 30% above the bottom edge, and line breaks chosen as a native speaker would naturally read them. Use when Codex needs to subtitle short videos, create social-video captions, transcribe video audio when no script is provided, keep speech-to-text subtitles in the original language, split long script lines into natural phrase-sized captions, preserve the original audio, and export a new MP4 rather than overwriting prior outputs.
 ---
 # Video Subtitle Natural Cuts
 ## Goal
-Create a new subtitled MP4 from a source video and a user-provided script. Burn captions into the video, keep the original audio, place captions safely for Instagram-style uploads, and choose caption units that feel natural to a native English speaker.
+Create a new subtitled MP4 from a source video and either a user-provided script/transcript or the video's automatically transcribed audio. Burn captions into the video, keep the original audio, preserve the spoken language without translation, place captions safely for Instagram-style uploads, and choose caption units that feel natural to a native speaker of that language.
 ## Workflow
 1. Inspect the video with `ffprobe` to confirm duration, orientation, resolution, audio stream, and codec details.
-2. Detect speech/silence with `ffmpeg -af silencedetect` when timing is not already supplied. Use the first non-silent point as the earliest caption start so opening captions do not appear before the speaker begins.
-3. Segment the script into natural caption units. Prefer short clauses and meaning groups over full sentences when a sentence is long.
-4. Create an ASS subtitle file. Use `PlayResX` and `PlayResY` matching the rendered orientation, readable white bold text with a black outline, and a bottom margin of about 30% of the video height for Instagram-safe placement.
-5. Encode a new MP4 with subtitles burned in. Preserve the original audio stream content by mapping the primary audio stream and encoding to AAC for compatibility.
-6. Extract representative frames around important caption boundaries and visually verify no caption appears too early, too large, clipped, too low for Instagram UI, or awkwardly split.
-7. Return only the new MP4 path from the outputs directory, and mention the key verification points.
+2. If the user did not provide a script or transcript, transcribe the video audio with `scripts/transcribe_audio.py` and use the generated caption segments as the starting point.
+3. Detect speech/silence with `ffmpeg -af silencedetect` when timing is not already supplied or when the transcript needs timing refinement. Use the first non-silent point as the earliest caption start so opening captions do not appear before the speaker begins.
+4. Segment the script or transcript into natural caption units in the original language. Prefer short clauses and meaning groups over full sentences when a sentence is long.
+5. Create an ASS subtitle file. Use `PlayResX` and `PlayResY` matching the rendered orientation, readable white bold text with a black outline, and a bottom margin of about 30% of the video height for Instagram-safe placement.
+6. Encode a new MP4 with subtitles burned in. Preserve the original audio stream content by mapping the primary audio stream and encoding to AAC for compatibility.
+7. Extract representative frames around important caption boundaries and visually verify no caption appears too early, too large, clipped, too low for Instagram UI, or awkwardly split.
+8. Return only the new MP4 path from the outputs directory, and mention the key verification points.
+
+## Automatic Transcription
+Use `scripts/transcribe_audio.py` when the user does not provide a script or asks to generate subtitles from the video audio.
+
+Never translate automatic speech-to-text output unless the user explicitly asks for translation. Captions must stay in the spoken language: English speech stays English, Japanese speech stays Japanese, and mixed-language speech stays mixed. When correcting obvious transcription errors, keep the correction in the same language as the speech.
+
+The script uses the local `openai-whisper` Python package. The user has pre-approved installing this dependency for this skill, so do not ask for separate confirmation before running the install command. If the execution sandbox requires elevated permissions because the command needs network access or package-cache writes, request escalation with a concise justification and proceed.
+```bash
+python3 -m pip install -U openai-whisper
+```
+
+Run transcription like:
+```bash
+python3 scripts/transcribe_audio.py input.mp4 work/transcript_segments.json --model small --language en
+```
+
+The output is a JSON array compatible with `scripts/create_ass_subtitles.py`:
+```json
+[
+  {"start":"0:00:01.50","end":"0:00:02.24","text":"hello world"}
+]
+```
+
+Prefer `--model small` for a balance of speed and accuracy on short social videos. Use `base` or `tiny` when speed matters more than accuracy, and `medium` only when the local machine can handle the extra runtime. If the spoken language is unknown, omit `--language` and let Whisper detect it. Treat `--language` only as a spoken-language hint, not as a target translation language.
+
+After transcription, still review and adjust the generated segments. Whisper word grouping is useful but not always the most natural reading rhythm for burned-in captions. During review, do not localize, summarize, or translate the text unless the user explicitly requests that behavior.
 ## Natural Caption Splitting
 Prefer these splitting rules for English scripts:
 - Keep short independent lines intact, such as `hello world`, `it's 5:00 a.m.`, and `Let's GO`.
@@ -21,6 +48,7 @@ Prefer these splitting rules for English scripts:
 - Avoid splitting inside fixed expressions, times, names, dates, or idioms unless the line would otherwise be too long.
 - Favor 1 to 2 lines per caption, with each line short enough to scan quickly on a phone screen.
 - If a sentence has a natural pause in the audio, align the split to that pause even when the text could fit as one caption.
+For non-English scripts or transcripts, apply the same principle in that language: split by native reading rhythm and speech pauses, while preserving the original wording and language.
 ## Caption Position
 Default to Instagram-safe caption placement: set the ASS bottom margin to about 30% of the rendered video height. For a 1080x1920 vertical video, use `MarginV: 576`. Increase or decrease this only when the visual content requires it or the user asks for a different placement.
 ## Timing Guidance

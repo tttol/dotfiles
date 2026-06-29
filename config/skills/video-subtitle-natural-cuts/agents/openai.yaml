@@ -1,4 +1,4 @@
 interface:
   display_name: "Video Subtitle Natural Cuts"
-  short_description: "Instagram向けに自然な区切りの字幕を焼き込むスキル"
-  default_prompt: "Use $video-subtitle-natural-cuts to add Instagram-safe burned-in captions to this video from a script with natural phrase breaks."
+  short_description: "翻訳せず、動画音声の言語のまま自然な字幕を焼き込むスキル"
+  default_prompt: "Use $video-subtitle-natural-cuts to transcribe this video if needed, preserve the spoken language without translation, then add Instagram-safe burned-in captions with natural phrase breaks."
