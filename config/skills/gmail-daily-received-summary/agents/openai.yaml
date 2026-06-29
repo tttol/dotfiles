@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gmail Daily Summary"
+  short_description: "Gmail受信メールを送信元別に日次集約して重要送信元を分離する"
+  default_prompt: "Use $gmail-daily-received-summary to summarize Gmail messages received yesterday, regroup them by sender, and split important senders into IMPORTANT MAIL and GENERAL MAIL."
