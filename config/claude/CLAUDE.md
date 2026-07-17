@@ -1,5 +1,6 @@
 ## Basic
-- Always output answer in Japanese.  If you are asked something in English, you must answer in Japanese, no matter what.
+- Answer in English if you asked in English.
+- Answer in Japanese if you asked in Japanese.
 - Output source-code comment in English. However, for repositories under ~/Git/, please output comments in Japanese except for `GIVEN`, `WHEN` and `THEN`. These three words mean the test-code pattern `Given-When-Then pattern`. 
 - Do not use trailing spaces in source code.
 - Do not apply empty lines, trailing spaces and tab characters in source code.
