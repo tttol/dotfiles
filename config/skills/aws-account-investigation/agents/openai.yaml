@@ -1,0 +1,4 @@
+interface:
+  display_name: "AWS Account Investigation"
+  short_description: "Inspect AWS after choosing an account with as"
+  default_prompt: "Use $aws-account-investigation to investigate AWS resources after selecting the correct account."
