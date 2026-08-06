@@ -1,6 +1,6 @@
 ---
 name: tttol-coding-standard
-description: Apply tttol's software architecture and coding standards, including SOLID principles such as the Open–Closed Principle, when implementing, refactoring, or reviewing code written in any programming language. Read the matching language guide in this skill for language-specific rules.
+description: Apply tttol's software architecture and coding standards, including SOLID principles such as the Open–Closed and Dependency Inversion Principles, when implementing, refactoring, or reviewing code written in any programming language. Read the matching language guide in this skill for language-specific rules.
 ---
 
 # tttol's Coding Standard
@@ -498,3 +498,114 @@ active_names = [
 - Keep side effects such as I/O, logging, time, randomness, and mutation at clear boundaries.
 - Compose small meaningful operations instead of embedding unrelated decisions in one long pipeline.
 - Use a procedural loop when it is clearer, when early exit is important, or when a transformation would become difficult to read. Do not force functional constructs for their own sake.
+
+## 5. Dependency Inversion Principle (DIP)
+
+Apply the Dependency Inversion Principle to keep high-level business policies independent from low-level infrastructure details:
+
+> High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.
+
+DIP is about dependency direction, not about using a Java `interface`. Dependency injection is one implementation technique: provide a collaborator from outside instead of constructing a concrete detail inside the high-level module. The abstraction should be owned by the high-level policy and contain only the operations that policy needs.
+
+### 5.1. Java: inject an interface
+
+```java
+interface UserRepository {
+    Optional<User> findById(UserId id);
+}
+
+final class UserService {
+    private final UserRepository repository;
+
+    UserService(UserRepository repository) {
+        this.repository = repository;
+    }
+
+    Optional<User> findUser(UserId id) {
+        return repository.findById(id);
+    }
+}
+```
+
+`UserService` depends on the repository abstraction, not on MySQL, a web framework, or a concrete repository. The application composition root can inject `SqlUserRepository` in production and an in-memory fake in tests.
+
+### 5.2. Rust: use traits and ownership
+
+Rust has no class inheritance, but traits define behavior contracts and generics provide dependency injection with static dispatch:
+
+```rust
+trait UserRepository {
+    fn find_by_id(&self, id: UserId) -> Result<Option<User>, RepoError>;
+}
+
+struct UserService<R>
+where
+    R: UserRepository,
+{
+    repository: R,
+}
+
+impl<R> UserService<R>
+where
+    R: UserRepository,
+{
+    fn find_user(&self, id: UserId) -> Result<Option<User>, RepoError> {
+        self.repository.find_by_id(id)
+    }
+}
+```
+
+The core service owns the `UserRepository` trait, while a database adapter implements the trait in an infrastructure module. Use `R: UserRepository` when the concrete type is known and static dispatch is preferred. Use `Box<dyn UserRepository>` when the implementation must be selected at runtime:
+
+```rust
+struct DynamicUserService {
+    repository: Box<dyn UserRepository>,
+}
+```
+
+For a dependency consisting of one operation, inject a closure instead of creating a trait:
+
+```rust
+fn find_user<F>(id: UserId, load: F) -> Result<Option<User>, RepoError>
+where
+    F: Fn(UserId) -> Result<Option<User>, RepoError>,
+{
+    load(id)
+}
+```
+
+### 5.3. Python: use protocols and duck typing
+
+Python can express the abstraction structurally with `Protocol`; the implementation does not need to inherit from it:
+
+```python
+from dataclasses import dataclass
+from typing import Optional, Protocol
+
+
+class UserRepository(Protocol):
+    def find_by_id(self, user_id: str) -> Optional[User]:
+        ...
+
+
+@dataclass(frozen=True)
+class UserService:
+    repository: UserRepository
+
+    def find_user(self, user_id: str) -> Optional[User]:
+        return self.repository.find_by_id(user_id)
+```
+
+Inject a database repository, an in-memory repository, or a test double as long as it provides `find_by_id`. For a single operation, inject a `Callable` instead of introducing a protocol.
+
+### 5.4. Apply DIP deliberately
+
+- Apply DIP selectively; do not abstract every component. Identify frequently changing or externally volatile components and place an abstraction at their boundary so stable policy depends on the abstraction.
+- Keep stable, simple components concrete when there is no meaningful change pressure, substitution need, or testing benefit. Unnecessary abstractions add indirection and make the design harder to understand.
+- Define ports, traits, protocols, or function types near the high-level policy that consumes them.
+- Keep adapters, databases, frameworks, file systems, clocks, and network clients at the edges of the system.
+- Inject dependencies at the composition root; do not construct infrastructure inside domain or application logic.
+- Keep abstractions narrow and intention-revealing. Do not create an interface for every class or wrap stable pure functions without a real substitution need.
+- Prefer static dispatch and generics when they fit; use dynamic dispatch, protocols, or closures when runtime substitution is required.
+- Test high-level policy with deterministic fakes or in-memory implementations, then test infrastructure adapters separately.
+- Return values from ports and services rather than mutating caller-owned arguments or hiding effects in global state.
