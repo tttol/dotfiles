@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tttol Coding Standard"
+  short_description: "Apply tttol architecture and coding standards"
+  default_prompt: "Use $tttol-coding-standard to guide this coding task."
