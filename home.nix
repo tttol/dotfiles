@@ -44,6 +44,14 @@
     #     source = ./config/skills;
     #     recursive = true;
     # };
+    # Codex hooks
+    home.file.".codex/hooks" = {
+        source = ./config/codex/hooks;
+        recursive = true;
+    };
+    home.file.".codex/hooks.json" = {
+        source = ./config/codex/hooks.json;
+    };
 
     # lazygit
     home.file."Library/Application Support/lazygit" = {
