@@ -478,16 +478,6 @@ final var declarativeActiveNames = users.stream()
     .toList();
 ```
 
-The same intent can be expressed with a comprehension in Python:
-
-```python
-active_names = [
-    user.name
-    for user in users
-    if user.is_active
-]
-```
-
 ### 4.2. Apply functional principles
 
 - Prefer immutable values, pure functions, explicit inputs and outputs, and method/function arguments that are immutable or exposed through read-only types. Treat mutable arguments as a dangerous design smell; avoid mutating caller-owned data, and remember that `final` or `const` references alone do not make the referenced object immutable.
@@ -529,76 +519,9 @@ final class UserService {
 
 `UserService` depends on the repository abstraction, not on MySQL, a web framework, or a concrete repository. The application composition root can inject `SqlUserRepository` in production and an in-memory fake in tests.
 
-### 5.2. Rust: use traits and ownership
+Non-OOP languages can apply the same principle with traits, protocols, function types, closures, or modules. Read the relevant language guide when implementing those abstractions.
 
-Rust has no class inheritance, but traits define behavior contracts and generics provide dependency injection with static dispatch:
-
-```rust
-trait UserRepository {
-    fn find_by_id(&self, id: UserId) -> Result<Option<User>, RepoError>;
-}
-
-struct UserService<R>
-where
-    R: UserRepository,
-{
-    repository: R,
-}
-
-impl<R> UserService<R>
-where
-    R: UserRepository,
-{
-    fn find_user(&self, id: UserId) -> Result<Option<User>, RepoError> {
-        self.repository.find_by_id(id)
-    }
-}
-```
-
-The core service owns the `UserRepository` trait, while a database adapter implements the trait in an infrastructure module. Use `R: UserRepository` when the concrete type is known and static dispatch is preferred. Use `Box<dyn UserRepository>` when the implementation must be selected at runtime:
-
-```rust
-struct DynamicUserService {
-    repository: Box<dyn UserRepository>,
-}
-```
-
-For a dependency consisting of one operation, inject a closure instead of creating a trait:
-
-```rust
-fn find_user<F>(id: UserId, load: F) -> Result<Option<User>, RepoError>
-where
-    F: Fn(UserId) -> Result<Option<User>, RepoError>,
-{
-    load(id)
-}
-```
-
-### 5.3. Python: use protocols and duck typing
-
-Python can express the abstraction structurally with `Protocol`; the implementation does not need to inherit from it:
-
-```python
-from dataclasses import dataclass
-from typing import Optional, Protocol
-
-
-class UserRepository(Protocol):
-    def find_by_id(self, user_id: str) -> Optional[User]:
-        ...
-
-
-@dataclass(frozen=True)
-class UserService:
-    repository: UserRepository
-
-    def find_user(self, user_id: str) -> Optional[User]:
-        return self.repository.find_by_id(user_id)
-```
-
-Inject a database repository, an in-memory repository, or a test double as long as it provides `find_by_id`. For a single operation, inject a `Callable` instead of introducing a protocol.
-
-### 5.4. Apply DIP deliberately
+### 5.2. Apply DIP deliberately
 
 - Apply DIP selectively; do not abstract every component. Identify frequently changing or externally volatile components and place an abstraction at their boundary so stable policy depends on the abstraction.
 - Keep stable, simple components concrete when there is no meaningful change pressure, substitution need, or testing benefit. Unnecessary abstractions add indirection and make the design harder to understand.
