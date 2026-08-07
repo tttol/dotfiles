@@ -543,3 +543,170 @@ Non-OOP languages can apply the same principle with traits, protocols, function 
 - Prefer static dispatch and generics when they fit; use dynamic dispatch, protocols, or closures when runtime substitution is required.
 - Test high-level policy with deterministic fakes or in-memory implementations, then test infrastructure adapters separately.
 - Return values from ports and services rather than mutating caller-owned arguments or hiding effects in global state.
+
+## 7. Coding Rules
+
+Apply these focused implementation rules to code written in any language. Read the matching language guide for syntax and ecosystem-specific details.
+
+### 7.1. Quality and correctness
+
+- Follow all applicable repository instructions, including `AGENTS.md`, `CLAUDE.md`, and this skill.
+- Use the most specific appropriate type for every value. Avoid untyped or dynamically typed values when the language provides a safer alternative.
+- Handle expected failures explicitly with the language's appropriate error or exception mechanism. Do not catch and silently discard errors.
+- Apply the Open–Closed Principle from Chapter 4 when a family of behavior is expected to change.
+- Insert one blank line between method definitions.
+- Provide structured documentation for classes, public methods, and non-obvious behavior. Keep documentation focused on responsibility, inputs, outputs, and failure conditions.
+- Keep meaningful logic within methods. As a general rule, methods should contain more than five lines of logic; avoid over-splitting while extracting shorter methods when it clearly improves readability.
+
+```java
+/**
+ * Authenticates users and creates application sessions.
+ */
+final class AuthenticationService {
+    /**
+     * Authenticates a user and returns the created session.
+     *
+     * @param email the user's email address
+     * @param password the user's password
+     * @return the authenticated session
+     * @throws InvalidCredentialsException when the credentials are invalid
+     */
+    Session login(String email, String password) {
+        final var user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
+        final var authenticated = passwordVerifier.matches(password, user.passwordHash());
+        if (!authenticated) {
+            throw new InvalidCredentialsException("Invalid credentials");
+        }
+        return sessionRepository.create(user.id());
+    }
+}
+```
+
+### 7.2. Security
+
+- Never hard-code secrets such as API keys, credentials, private keys, or passwords. Load them from environment variables or a secure parameter store.
+- Prevent injection attacks by using an ORM or parameterized queries instead of concatenating untrusted input into SQL or other executable commands.
+- Validate all user-provided input at the system boundary. Reject invalid input explicitly and normalize it only when the domain contract permits normalization.
+- Never expose Personally Identifiable Information, passwords, tokens, or other sensitive data in logs, errors, responses, or telemetry.
+- Mask sensitive data whenever it must be displayed for diagnostics.
+- Use the latest stable version when introducing a new dependency. Do not upgrade an existing dependency without explicit approval; assess security and compatibility before changing it.
+
+```java
+record DatabaseConfig(String host, String username, String password) {
+    static DatabaseConfig fromEnvironment() {
+        return new DatabaseConfig(
+            requiredEnvironment("DB_HOST"),
+            requiredEnvironment("DB_USERNAME"),
+            requiredEnvironment("DB_PASSWORD")
+        );
+    }
+
+    private static String requiredEnvironment(String name) {
+        final var value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Missing required environment variable: " + name);
+        }
+        return value;
+    }
+}
+```
+
+Use a parameterized query when an ORM is not suitable:
+
+```java
+Optional<User> findByEmail(Connection connection, String email) throws SQLException {
+    final var sql = "SELECT id, email FROM users WHERE email = ?";
+    try (final var statement = connection.prepareStatement(sql)) {
+        statement.setString(1, email);
+        try (final var resultSet = statement.executeQuery()) {
+            return resultSet.next()
+                ? Optional.of(new User(resultSet.getLong("id"), resultSet.getString("email")))
+                : Optional.empty();
+        }
+    }
+}
+```
+
+Mask sensitive values before logging:
+
+```java
+static String maskEmail(String email) {
+    final var separator = email.indexOf('@');
+    if (separator <= 1) {
+        return "[MASKED]";
+    }
+    return email.charAt(0) + "***" + email.substring(separator);
+}
+```
+
+### 7.3. Input validation
+
+Validate input before it reaches domain or infrastructure logic. Keep invalid states out of the domain model where practical:
+
+```java
+record UserInput(String email) {
+    static UserInput parse(String email) {
+        final var normalizedEmail = email.trim();
+        if (normalizedEmail.isBlank() || !normalizedEmail.contains("@")) {
+            throw new IllegalArgumentException("A valid email address is required");
+        }
+        return new UserInput(normalizedEmail);
+    }
+}
+```
+
+### 7.4. Parameterized tests
+
+Prefer parameterized tests when the same behavior must be verified with multiple inputs. Keep each test focused on one method and make the Given–When–Then phases explicit:
+
+```java
+@ParameterizedTest
+@CsvSource({
+    "racecar, true",
+    "radar, true",
+    "level, true",
+    "hello, false",
+    "java, false"
+})
+void isPalindrome(String input, boolean expected) {
+    // GIVEN
+    final var value = input;
+
+    // WHEN
+    final var actual = StringUtils.isPalindrome(value);
+
+    // THEN
+    assertEquals(expected, actual);
+}
+```
+
+### 7.5. Transaction boundaries
+
+Scope a transaction around the complete set of operations that must succeed or fail atomically. Do not create an independent transaction for every SQL statement. Propagate failures so the transaction can roll back:
+
+```java
+@Service
+final class OrderService {
+    private final OrderRepository orderRepository;
+    private final InventoryRepository inventoryRepository;
+
+    OrderService(
+        OrderRepository orderRepository,
+        InventoryRepository inventoryRepository
+    ) {
+        this.orderRepository = orderRepository;
+        this.inventoryRepository = inventoryRepository;
+    }
+
+    @Transactional
+    OrderResult createOrder(Order order) {
+        final var savedOrder = orderRepository.save(order);
+        final var inventory = inventoryRepository.decreaseStock(
+            order.productId(),
+            order.quantity()
+        );
+        return new OrderResult(savedOrder.id(), inventory.remainingStock());
+    }
+}
+```
