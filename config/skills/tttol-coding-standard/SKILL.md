@@ -22,6 +22,7 @@ Inspect file extensions and the repository's build files before editing. Read th
 - Rust: [rust.md](rust.md)
 - TypeScript or JavaScript: [typescript.md](typescript.md)
 - Python: [python.md](python.md)
+- Terraform: [terraform.md](terraform.md)
 
 For a mixed-language change, read every relevant guide. Do not load unrelated guides merely because they are present.
 
