@@ -25,7 +25,17 @@ Inspect file extensions and the repository's build files before editing. Read th
 
 For a mixed-language change, read every relevant guide. Do not load unrelated guides merely because they are present.
 
-## 3. SOLID: Open–Closed Principle
+## 3. Modifying Existing Code
+
+When modifying existing code, control the scope of standardization:
+
+- Do not attempt to fix every existing violation of tttol's coding standard as part of an unrelated change.
+- Follow tttol's coding standard for all new code.
+- When modifying existing code within the scope of the requested change, permit revisions to the affected area so that it follows tttol's coding standard.
+- Keep these revisions limited to the affected area. Avoid broad refactoring, unrelated cleanup, or behavior changes made only for standardization.
+- Preserve existing behavior unless the requested change requires otherwise, and handle larger standardization efforts as explicitly scoped work.
+
+## 4. SOLID: Open–Closed Principle
 
 Apply the Open–Closed Principle (OCP) to behavior that is likely to change:
 
@@ -33,7 +43,7 @@ Apply the Open–Closed Principle (OCP) to behavior that is likely to change:
 
 Interpret “closed” as protecting a stable policy or core workflow from changes required by every new variation. It does not mean that no existing file may ever change. A factory, registry, configuration, or composition root is an intentional change point; the business logic that consumes the abstraction should not need to change for each new behavior.
 
-### 3.1. Identify an OCP violation
+### 4.1. Identify an OCP violation
 
 Treat a central conditional as a warning sign when every new behavior requires adding another branch to already-tested core logic:
 
@@ -55,7 +65,7 @@ final class KeyHandler {
 
 Adding left and right keys requires modifying both the `Direction` enum and the `switch` in `onKey`. The handler's existing behavior must be changed and revalidated even though the new behavior is conceptually another member of the same family. This increases the chance of regressions in stable behavior.
 
-### 3.2. Prefer an extension boundary
+### 4.2. Prefer an extension boundary
 
 Use an abstraction for interchangeable behavior and keep the core consumer dependent on that abstraction. The Strategy pattern is a natural fit when each variation has its own algorithm or behavior:
 
@@ -114,11 +124,11 @@ final class KeyEventFactory {
 
 When a new key is introduced, add the new domain output to `Direction` when necessary, add a `KeyEvent` implementation, and register it at the factory or registry. Keep `KeyHandler.onKey` unchanged. The handler is closed to modification, while the family of key behaviors is open to extension.
 
-### 3.3. Other patterns that support OCP
+### 4.3. Other patterns that support OCP
 
 Choose the pattern according to what is expected to vary. These patterns create different extension boundaries; none of them makes every part of the system permanently closed to modification.
 
-#### 3.3.1. State
+#### 4.3.1. State
 
 Use State when an object's behavior changes according to its current state. Add a new state object instead of expanding a conditional in the context:
 
@@ -150,7 +160,7 @@ record Order(OrderState state) {
 
 Adding `CancelledOrder` or `RefundedOrder` does not require modifying `Order`. Keep state transitions inside the state model and avoid using State for a small, fixed conditional.
 
-#### 3.3.2. Command
+#### 4.3.2. Command
 
 Use Command when requests or actions vary, especially when they must be queued, logged, retried, or undone:
 
@@ -182,7 +192,7 @@ final class EditorInvoker {
 
 Add a new command without modifying `EditorInvoker`. Keep the command interface small and move the actual domain operation into a collaborator when the command would otherwise become a large service.
 
-#### 3.3.3. Chain of Responsibility
+#### 4.3.3. Chain of Responsibility
 
 Use Chain of Responsibility when a request may be handled by one of several handlers and the handler sequence is configurable:
 
@@ -221,7 +231,7 @@ final class InputDispatcher {
 
 Add a new handler and configure it in the chain without changing `InputDispatcher`. Define ordering and fallback behavior explicitly because the chain's order is part of its behavior.
 
-#### 3.3.4. Decorator
+#### 4.3.4. Decorator
 
 Use Decorator when optional responsibilities can be layered around the same object:
 
@@ -256,7 +266,7 @@ final class LoggingNotifier implements Notifier {
 
 Add retry, metrics, authorization, or tracing behavior as another decorator. Keep decorators substitutable for the original interface and avoid creating a deep, order-sensitive wrapper stack without a clear reason.
 
-#### 3.3.5. Template Method
+#### 4.3.5. Template Method
 
 Use Template Method when the overall workflow is stable but some steps vary:
 
@@ -285,7 +295,7 @@ final class CsvImporter extends DataImporter {
 
 Add `JsonImporter` or another importer without modifying the stable workflow. Prefer composition or Strategy when inheritance would create tight coupling or when multiple dimensions of variation are needed.
 
-#### 3.3.6. Factory Method
+#### 4.3.6. Factory Method
 
 Use Factory Method when a stable workflow needs to create a product whose concrete type varies:
 
@@ -312,7 +322,7 @@ final class CsvReportJob extends ReportJob {
 
 Add a new job and exporter without modifying `ReportJob`. Keep the factory method focused on creation; do not use it to hide unrelated business logic.
 
-#### 3.3.7. Abstract Factory
+#### 4.3.7. Abstract Factory
 
 Use Abstract Factory when several related products must vary together:
 
@@ -351,7 +361,7 @@ final class SettingsScreen {
 
 Add `MacUiFactory` without modifying `SettingsScreen`. Use Abstract Factory only when the product family must remain compatible; otherwise, a smaller factory or direct dependency is clearer.
 
-#### 3.3.8. Bridge
+#### 4.3.8. Bridge
 
 Use Bridge when two independent dimensions of variation would otherwise create a class for every combination:
 
@@ -389,7 +399,7 @@ final class SecurityAlert extends Alert {
 
 Add a new alert type or sender independently. Bridge is useful when both the abstraction and its implementation are expected to evolve.
 
-#### 3.3.9. Observer
+#### 4.3.9. Observer
 
 Use Observer when new consumers should react to an event without modifying the event publisher:
 
@@ -419,7 +429,7 @@ final class PriceAlert implements PriceObserver {
 
 Add `AuditLogger` or `PortfolioUpdater` as another observer. Define event ownership, delivery guarantees, and failure handling explicitly because observers can make control flow and debugging less obvious.
 
-#### 3.3.10. Visitor
+#### 4.3.10. Visitor
 
 Use Visitor when the object structure is stable but new operations over that structure are expected:
 
@@ -447,7 +457,7 @@ final class AreaVisitor implements ShapeVisitor<Double> {
 
 Add `PerimeterVisitor` without modifying `Circle`. Visitor reverses the trade-off: adding a new shape requires updating every visitor, so use it only when the element hierarchy is more stable than the operations.
 
-### 3.4. Apply OCP deliberately
+### 4.4. Apply OCP deliberately
 
 - Use OCP where a family of interchangeable behaviors is expected to grow or change independently of its consumer.
 - Place the extension point at the stable policy boundary, not inside every small conditional.
@@ -456,11 +466,11 @@ Add `PerimeterVisitor` without modifying `Circle`. Visitor reverses the trade-of
 - Test the stable consumer against the abstraction, each new strategy independently, and the factory or registry mapping at its boundary.
 - Do not force OCP onto a small, stable, one-off decision. Extra interfaces, classes, and registries are harmful when the variation is unlikely or the abstraction is less clear than a simple conditional.
 
-## 4. Declarative and Functional Programming
+## 5. Declarative and Functional Programming
 
 Prefer declarative and functional programming over procedural programming whenever it makes the intent clearer. Describe the result to produce rather than manually controlling every mutation and iteration.
 
-### 4.1. Prefer transformations over mutable accumulation
+### 5.1. Prefer transformations over mutable accumulation
 
 ```java
 // Procedural: expose temporary state and mutation.
@@ -478,7 +488,7 @@ final var declarativeActiveNames = users.stream()
     .toList();
 ```
 
-### 4.2. Apply functional principles
+### 5.2. Apply functional principles
 
 - Prefer immutable values, pure functions, explicit inputs and outputs, and method/function arguments that are immutable or exposed through read-only types. Treat mutable arguments as a dangerous design smell; avoid mutating caller-owned data, and remember that `final` or `const` references alone do not make the referenced object immutable.
 - Prefer every method or function to return a meaningful value; avoid `void` or `None` in domain and application logic, reserving them for unavoidable side-effect boundaries.
@@ -489,7 +499,7 @@ final var declarativeActiveNames = users.stream()
 - Compose small meaningful operations instead of embedding unrelated decisions in one long pipeline.
 - Use a procedural loop when it is clearer, when early exit is important, or when a transformation would become difficult to read. Do not force functional constructs for their own sake.
 
-## 5. Dependency Inversion Principle (DIP)
+## 6. Dependency Inversion Principle (DIP)
 
 Apply the Dependency Inversion Principle to keep high-level business policies independent from low-level infrastructure details:
 
@@ -497,7 +507,7 @@ Apply the Dependency Inversion Principle to keep high-level business policies in
 
 DIP is about dependency direction, not about using a Java `interface`. Dependency injection is one implementation technique: provide a collaborator from outside instead of constructing a concrete detail inside the high-level module. The abstraction should be owned by the high-level policy and contain only the operations that policy needs.
 
-### 5.1. Java: inject an interface
+### 6.1. Java: inject an interface
 
 ```java
 interface UserRepository {
@@ -521,7 +531,7 @@ final class UserService {
 
 Non-OOP languages can apply the same principle with traits, protocols, function types, closures, or modules. Read the relevant language guide when implementing those abstractions.
 
-### 5.2. Apply DIP deliberately
+### 6.2. Apply DIP deliberately
 
 - Apply DIP selectively; do not abstract every component. Identify frequently changing or externally volatile components and place an abstraction at their boundary so stable policy depends on the abstraction.
 - Keep stable, simple components concrete when there is no meaningful change pressure, substitution need, or testing benefit. Unnecessary abstractions add indirection and make the design harder to understand.
