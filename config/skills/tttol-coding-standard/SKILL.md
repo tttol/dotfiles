@@ -558,6 +558,19 @@ Apply these focused implementation rules to code written in any language. Read t
 - Provide structured documentation for classes, public methods, and non-obvious behavior. Keep documentation focused on responsibility, inputs, outputs, and failure conditions.
 - Keep meaningful logic within methods. As a general rule, methods should contain more than five lines of logic; avoid over-splitting while extracting shorter methods when it clearly improves readability.
 
+**BAD**
+
+```java
+final class AuthenticationService {
+    Session login(String email, String password) {
+        final var user = userRepository.findByEmail(email).orElse(null);
+        return user == null ? null : sessionRepository.create(user.id());
+    }
+}
+```
+
+**GOOD**
+
 ```java
 /**
  * Authenticates users and creates application sessions.
@@ -592,6 +605,18 @@ final class AuthenticationService {
 - Mask sensitive data whenever it must be displayed for diagnostics.
 - Use the latest stable version when introducing a new dependency. Do not upgrade an existing dependency without explicit approval; assess security and compatibility before changing it.
 
+**BAD**
+
+```java
+final var databaseConfig = new DatabaseConfig(
+    "production-db.example.com",
+    "admin",
+    "SuperSecret123!"
+);
+```
+
+**GOOD**
+
 ```java
 record DatabaseConfig(String host, String username, String password) {
     static DatabaseConfig fromEnvironment() {
@@ -614,6 +639,20 @@ record DatabaseConfig(String host, String username, String password) {
 
 Use a parameterized query when an ORM is not suitable:
 
+**BAD**
+
+```java
+String findByEmail(Connection connection, String email) throws SQLException {
+    final var sql = "SELECT id, email FROM users WHERE email = '" + email + "'";
+    try (final var statement = connection.createStatement();
+         final var resultSet = statement.executeQuery(sql)) {
+        return resultSet.next() ? resultSet.getString("email") : null;
+    }
+}
+```
+
+**GOOD**
+
 ```java
 Optional<User> findByEmail(Connection connection, String email) throws SQLException {
     final var sql = "SELECT id, email FROM users WHERE email = ?";
@@ -630,6 +669,16 @@ Optional<User> findByEmail(Connection connection, String email) throws SQLExcept
 
 Mask sensitive values before logging:
 
+**BAD**
+
+```java
+static String formatEmailForLog(String email) {
+    return "User email: " + email;
+}
+```
+
+**GOOD**
+
 ```java
 static String maskEmail(String email) {
     final var separator = email.indexOf('@');
@@ -643,6 +692,18 @@ static String maskEmail(String email) {
 ### 7.3. Input validation
 
 Validate input before it reaches domain or infrastructure logic. Keep invalid states out of the domain model where practical:
+
+**BAD**
+
+```java
+record UserInput(String email) {
+    static UserInput parse(String email) {
+        return new UserInput(email);
+    }
+}
+```
+
+**GOOD**
 
 ```java
 record UserInput(String email) {
@@ -659,6 +720,20 @@ record UserInput(String email) {
 ### 7.4. Parameterized tests
 
 Prefer parameterized tests when the same behavior must be verified with multiple inputs. Keep each test focused on one method and make the Given–When–Then phases explicit:
+
+**BAD**
+
+```java
+@Test
+void isPalindrome() {
+    assertTrue(StringUtils.isPalindrome("racecar"));
+    assertTrue(StringUtils.isPalindrome("radar"));
+    assertFalse(StringUtils.isPalindrome("hello"));
+    assertFalse(StringUtils.isPalindrome("java"));
+}
+```
+
+**GOOD**
 
 ```java
 @ParameterizedTest
@@ -684,6 +759,21 @@ void isPalindrome(String input, boolean expected) {
 ### 7.5. Transaction boundaries
 
 Scope a transaction around the complete set of operations that must succeed or fail atomically. Do not create an independent transaction for every SQL statement. Propagate failures so the transaction can roll back:
+
+**BAD**
+
+```java
+OrderResult createOrder(Order order) {
+    final var savedOrder = orderRepository.save(order);
+    final var inventory = inventoryRepository.decreaseStock(
+        order.productId(),
+        order.quantity()
+    );
+    return new OrderResult(savedOrder.id(), inventory.remainingStock());
+}
+```
+
+**GOOD**
 
 ```java
 @Service
