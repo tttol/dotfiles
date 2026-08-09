@@ -9,6 +9,7 @@ import os
 import subprocess
 import sys
 from collections.abc import Callable, Mapping
+from datetime import datetime
 from pathlib import Path
 
 
@@ -82,10 +83,29 @@ def capture_prompt(event: Mapping[str, object], state_dir: Path) -> None:
     state_file_path(state_dir, session_id, turn_id).write_text(prompt, encoding="utf-8")
 
 
+def _append_review_log(
+    log_path: Path,
+    reviewed_at: datetime,
+    prompt: str,
+    feedback: str,
+) -> None:
+    log_entry = (
+        f"{'=' * 80}\n"
+        f"Reviewed at: {reviewed_at.isoformat()}\n\n"
+        f"--- Prompt ---\n{prompt}\n\n"
+        f"--- Feedback ---\n{feedback}\n"
+    )
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("a", encoding="utf-8") as log_file:
+        log_file.write(log_entry)
+
+
 def evaluate_prompt(
     event: Mapping[str, object],
     state_dir: Path,
+    log_path: Path,
     reviewer: Callable[[str], str] = run_luna_review,
+    reviewed_at: datetime | None = None,
 ) -> dict[str, object]:
     session_id = read_string(event, "session_id")
     turn_id = read_string(event, "turn_id")
@@ -109,13 +129,23 @@ def evaluate_prompt(
 
     if not feedback:
         return {}
+    review_datetime = reviewed_at or datetime.now().astimezone()
+    try:
+        _append_review_log(log_path, review_datetime, prompt, feedback)
+    except (OSError, UnicodeError) as error:
+        log_warning = (
+            "\n\nEnglish review log warning: "
+            f"failed to append to {log_path}: {error}"
+        )
+    else:
+        log_warning = ""
     bounded_feedback = feedback[:12000]
     if len(feedback) > len(bounded_feedback):
         bounded_feedback = f"{bounded_feedback.rstrip()}\n\n[Feedback truncated.]"
     return {
         "systemMessage": (
             "English feedback (GPT-5.6-Luna, low reasoning):\n\n"
-            f"{bounded_feedback}"
+            f"{bounded_feedback}{log_warning}"
         )
     }
 
@@ -133,11 +163,12 @@ def main() -> int:
     event_name = read_string(event, "hook_event_name")
     codex_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
     state_dir = codex_home / "tmp" / "english-review-hook"
+    log_path = codex_home / "log" / "english-review.log"
     if event_name == "UserPromptSubmit":
         capture_prompt(event, state_dir)
         return 0
     if event_name == "Stop":
-        print(json.dumps(evaluate_prompt(event, state_dir), ensure_ascii=False))
+        print(json.dumps(evaluate_prompt(event, state_dir, log_path), ensure_ascii=False))
     return 0
 
 
