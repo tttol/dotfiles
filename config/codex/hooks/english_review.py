@@ -37,6 +37,11 @@ Why: <one concise explanation, or "The prompt is natural.">
 </USER_PROMPT>"""
 
 
+def contains_reviewable_text(prompt: str) -> bool:
+    """Return whether the prompt contains ASCII letters or digits."""
+    return any(character.isascii() and character.isalnum() for character in prompt)
+
+
 def run_luna_review(prompt: str) -> str:
     command = (
         "codex",
@@ -77,7 +82,12 @@ def capture_prompt(event: Mapping[str, object], state_dir: Path) -> None:
     session_id = read_string(event, "session_id")
     turn_id = read_string(event, "turn_id")
     prompt = read_string(event, "prompt")
-    if not session_id or not turn_id or not prompt.strip():
+    if (
+        not session_id
+        or not turn_id
+        or not prompt.strip()
+        or not contains_reviewable_text(prompt)
+    ):
         return
     state_dir.mkdir(parents=True, exist_ok=True)
     state_file_path(state_dir, session_id, turn_id).write_text(prompt, encoding="utf-8")
