@@ -22,7 +22,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Setup lazy.nvim
-require("lazy").setup({
+local lazy = require("lazy")
+lazy.setup({
     spec = {
         -- import your plugins from `lua/plugins/*.lua`
         { import = "plugins" },
@@ -30,12 +31,23 @@ require("lazy").setup({
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "habamax" } },
-    -- automatically check for plugin updates
-    checker = { enabled = true },
+    -- Disable periodic checks because plugins are updated once at launch.
+    checker = { enabled = false },
     -- Use writable path for lockfile (Nix store symlink is read-only)
     lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
     -- disable luarocks support to fix the error
     rocks = {
         enabled = false,
     },
+})
+
+vim.api.nvim_create_autocmd("User", {
+    group = vim.api.nvim_create_augroup("lazy_auto_update", { clear = true }),
+    pattern = "VeryLazy",
+    once = true,
+    callback = function()
+        if #vim.api.nvim_list_uis() > 0 then
+            lazy.update({ show = false })
+        end
+    end,
 })
