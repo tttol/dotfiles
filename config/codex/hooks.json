@@ -1,5 +1,5 @@
 {
-  "description": "Review user prompts for natural English after each Codex turn.",
+  "description": "Review user prompts for natural English when they are submitted.",
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -7,17 +7,7 @@
           {
             "type": "command",
             "command": "python3 -B ~/.codex/hooks/english_review.py",
-            "statusMessage": "Saving prompt for English review"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 -B ~/.codex/hooks/english_review.py",
+            "async": true,
             "timeout": 120,
             "statusMessage": "Reviewing prompt English"
           }

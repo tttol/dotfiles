@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import subprocess
@@ -16,11 +15,6 @@ from pathlib import Path
 def read_string(event: Mapping[str, object], key: str) -> str:
     value = event.get(key)
     return value if isinstance(value, str) else ""
-
-
-def state_file_path(state_dir: Path, session_id: str, turn_id: str) -> Path:
-    state_key = f"{session_id}\0{turn_id}".encode("utf-8")
-    return state_dir / f"{hashlib.sha256(state_key).hexdigest()}.txt"
 
 
 def build_review_prompt(prompt: str) -> str:
@@ -82,21 +76,6 @@ def run_luna_review(prompt: str) -> str:
     return feedback
 
 
-def capture_prompt(event: Mapping[str, object], state_dir: Path) -> None:
-    session_id = read_string(event, "session_id")
-    turn_id = read_string(event, "turn_id")
-    prompt = read_string(event, "prompt")
-    if (
-        not session_id
-        or not turn_id
-        or not prompt.strip()
-        or not contains_reviewable_text(prompt)
-    ):
-        return
-    state_dir.mkdir(parents=True, exist_ok=True)
-    state_file_path(state_dir, session_id, turn_id).write_text(prompt, encoding="utf-8")
-
-
 def _append_review_log(
     log_path: Path,
     reviewed_at: datetime,
@@ -116,30 +95,17 @@ def _append_review_log(
 
 def evaluate_prompt(
     event: Mapping[str, object],
-    state_dir: Path,
     log_path: Path,
     reviewer: Callable[[str], str] = run_luna_review,
     reviewed_at: datetime | None = None,
 ) -> dict[str, object]:
-    session_id = read_string(event, "session_id")
-    turn_id = read_string(event, "turn_id")
-    if not session_id or not turn_id:
-        return {}
-
-    prompt_path = state_file_path(state_dir, session_id, turn_id)
-    try:
-        prompt = prompt_path.read_text(encoding="utf-8")
-    except FileNotFoundError:
+    prompt = read_string(event, "prompt")
+    if not prompt.strip() or not contains_reviewable_text(prompt):
         return {}
     try:
         feedback = reviewer(prompt).strip()
     except (OSError, RuntimeError, subprocess.SubprocessError) as error:
         return {"systemMessage": f"English review hook failed: {error}"}
-    finally:
-        try:
-            prompt_path.unlink()
-        except FileNotFoundError:
-            pass
 
     if not feedback:
         return {}
@@ -176,13 +142,9 @@ def main() -> int:
     event = read_event()
     event_name = read_string(event, "hook_event_name")
     codex_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
-    state_dir = codex_home / "tmp" / "english-review-hook"
     log_path = codex_home / "log" / "english-review.log"
     if event_name == "UserPromptSubmit":
-        capture_prompt(event, state_dir)
-        return 0
-    if event_name == "Stop":
-        print(json.dumps(evaluate_prompt(event, state_dir, log_path), ensure_ascii=False))
+        print(json.dumps(evaluate_prompt(event, log_path), ensure_ascii=False))
     return 0
 
 
