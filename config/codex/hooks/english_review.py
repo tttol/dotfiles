@@ -44,7 +44,11 @@ def contains_reviewable_text(prompt: str) -> bool:
 
 def run_luna_review(prompt: str) -> str:
     command = (
-        "codex",
+        "/nix/var/nix/profiles/default/bin/nix",
+        "run",
+        "github:tttol/nix-codex",
+        "--refresh",
+        "--",
         "exec",
         "--ignore-user-config",
         "--disable",
