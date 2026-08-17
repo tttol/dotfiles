@@ -7,7 +7,6 @@
           {
             "type": "command",
             "command": "python3 -B ~/.codex/hooks/english_review.py",
-            "async": true,
             "timeout": 120,
             "statusMessage": "Reviewing prompt English"
           }
