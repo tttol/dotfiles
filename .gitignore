@@ -11,3 +11,4 @@ claude/todos/*
 result
 config/nvim/lazy-lock.json
 config/skills/.system/*
+nvim.log
