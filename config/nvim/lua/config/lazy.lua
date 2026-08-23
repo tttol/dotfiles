@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("User", {
     once = true,
     callback = function()
         if #vim.api.nvim_list_uis() > 0 then
-            lazy.update({ show = true })
+            lazy.update({ show = false })
         end
     end,
 })
