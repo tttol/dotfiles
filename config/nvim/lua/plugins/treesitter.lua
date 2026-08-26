@@ -18,6 +18,8 @@ return {
             "lua",
             "python",
             "go",
+            "gotmpl",
+            "helm",
             "yaml",
             "toml",
             "json",
@@ -36,6 +38,7 @@ return {
             "lua",
             "python",
             "go",
+            "helm",
             "yaml",
             "toml",
             "json",
@@ -50,9 +53,11 @@ return {
         vim.cmd.TSInstallConfigured()
         vim.api.nvim_create_autocmd("FileType", {
             pattern = filetypes,
-            callback = function()
+            callback = function(args)
                 -- Neovim itself runs highlighting and folding from installed parser/query files.
-                pcall(vim.treesitter.start)
+                -- Keep yaml available as the injected language for Helm templates.
+                local language = vim.bo[args.buf].filetype == "yaml" and "helm" or nil
+                pcall(vim.treesitter.start, args.buf, language)
                 vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
                 vim.wo.foldmethod = "expr"
                 vim.wo.foldlevel = 99
