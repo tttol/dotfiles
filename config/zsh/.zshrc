@@ -72,10 +72,21 @@ nvd() {
 export NIXPKGS_ALLOW_UNFREE=1
 
 ########################################################
+# GHOSTTY
+########################################################
+
+function set_ghostty_tab_title() {
+  print -Pn "\e]0;${PWD:t}\a"
+}
+
+precmd_functions+=(set_ghostty_tab_title)
+#
+########################################################
 # LOCAL SETTINGS
 ########################################################
 
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
 
 ########################################################
 # TOOL
