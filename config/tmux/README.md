@@ -12,6 +12,16 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 Apply the dotfiles with Home Manager, open a new WezTerm window, and press
 Ctrl-b followed by Shift-i to install resurrect and continuum.
 
+After updating the configuration and running `home-manager switch --flake . --impure`,
+reload the settings in your running tmux session:
+
+```sh
+tmux source-file ~/.tmux.conf
+```
+
+Alternatively, press Ctrl-b followed by lowercase r. Reopening WezTerm attaches
+to the existing tmux server, so it does not reload the tmux configuration.
+
 WezTerm starts `tmux new-session -A -s main`. Every new native window attaches
 to this same session and shares its selected tmux window. Cmd+T creates a
 tmux window, displayed in the tmux status bar. Cmd+1 through Cmd+9 select

@@ -108,8 +108,7 @@ config.hide_tab_bar_if_only_one_tab = true
 ------------------------------------
 config.keys = {
     -- Cmd+T creates a tmux window in the attached session.
-    -- We need to create a new tab by pressing `ctrl+b` because managing sessions by tmux.
-    -- `x02c` means `ctrl+b`. So this line means that wezterm send to tmux to create a new tab when pressing `cmd+t`
+    -- Send Ctrl+B (\x02), followed by c, to invoke tmux's new-window binding.
     { key = 't', mods = 'SUPER', action = wezterm.action.SendString '\x02c' },
     -- Horizontal split (split into top and bottom)
     {
