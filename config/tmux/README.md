@@ -45,6 +45,16 @@ line. Save manually before rebooting to include the latest changes. After
 rebooting, reopen WezTerm; continuum restores the snapshot on tmux server
 startup. This configuration does not launch WezTerm automatically at login.
 
+The configuration adds Homebrew to tmux's server PATH before loading plugins.
+This is necessary when WezTerm starts from Finder or the Dock without the shell's
+PATH; otherwise the plugin scripts cannot find `tmux` and snapshots are not saved.
+Snapshots are explicitly stored in `~/.tmux/resurrect`.
+
+After setup or a configuration reload, press Ctrl-b followed by Ctrl-s once.
+Verify that `~/.tmux/resurrect/last` exists before relying on reboot restoration.
+`tmux show-option -g @resurrect-save-script-path` should show the installed save
+script, and `tmux show-option -g status-right` should include `continuum_save.sh`.
+
 Resurrect restores tmux windows, panes, layouts, working directories, and
 captured pane contents. It does not restore native WezTerm tabs, macOS
 window positions, or process memory. Supported programs may be restarted;
