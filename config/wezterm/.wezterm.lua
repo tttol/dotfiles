@@ -6,6 +6,8 @@ local config = wezterm.config_builder()
 ------------------------------------
 --- GENERAL
 ------------------------------------
+-- Attach every new WezTerm window to the same persistent tmux session.
+config.default_prog = { '/opt/homebrew/bin/tmux', 'new-session', '-A', '-s', 'main' }
 config.initial_cols = 120
 config.initial_rows = 28
 config.color_scheme = 'Tokyo Night'
@@ -98,77 +100,88 @@ end)
 -- tab bar
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
-config.hide_tab_bar_if_only_one_tab = false
+config.hide_tab_bar_if_only_one_tab = true
 
 
 ------------------------------------
 --- WINDOW, PANE
 ------------------------------------
 config.keys = {
+    -- Cmd+T creates a tmux window in the attached session.
+    { key = 't', mods = 'SUPER', action = wezterm.action.SendString '\x02c' },
     -- Horizontal split (split into top and bottom)
     {
         key = '\'',
         mods = 'SUPER|SHIFT',
-        action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
+        action = wezterm.action.SendString '\x02"',
     },
     -- Vertical split (split into left and right)
     {
         key = '\'',
         mods = 'SUPER',
-        action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+        action = wezterm.action.SendString '\x02%',
     },
 
     -- move to other pane
     {
         key = 'h',
         mods = 'SUPER',
-        action = wezterm.action.ActivatePaneDirection 'Left',
+        action = wezterm.action.SendString '\x02:select-pane -L\r',
     },
     {
         key = 'l',
         mods = 'SUPER',
-        action = wezterm.action.ActivatePaneDirection 'Right',
+        action = wezterm.action.SendString '\x02:select-pane -R\r',
     },
     {
         key = 'k',
         mods = 'SUPER',
-        action = wezterm.action.ActivatePaneDirection 'Up',
+        action = wezterm.action.SendString '\x02:select-pane -U\r',
     },
     {
         key = 'j',
         mods = 'SUPER',
-        action = wezterm.action.ActivatePaneDirection 'Down',
+        action = wezterm.action.SendString '\x02:select-pane -D\r',
     },
 
     -- close pane
     {
         key = 'w',
         mods = 'SUPER',
-        action = wezterm.action.CloseCurrentPane { confirm = true },
+        action = wezterm.action.SendString '\x02x',
     },
 
     -- pane size
     {
         key = 'LeftArrow',
         mods = 'SUPER',
-        action = wezterm.action.AdjustPaneSize { 'Left', 5 },
+        action = wezterm.action.SendString '\x02:resize-pane -L 5\r',
     },
     {
         key = 'RightArrow',
         mods = 'SUPER',
-        action = wezterm.action.AdjustPaneSize { 'Right', 5 },
+        action = wezterm.action.SendString '\x02:resize-pane -R 5\r',
     },
     {
         key = 'UpArrow',
         mods = 'SUPER',
-        action = wezterm.action.AdjustPaneSize { 'Up', 5 },
+        action = wezterm.action.SendString '\x02:resize-pane -U 5\r',
     },
     {
         key = 'DownArrow',
         mods = 'SUPER',
-        action = wezterm.action.AdjustPaneSize { 'Down', 5 },
+        action = wezterm.action.SendString '\x02:resize-pane -D 5\r',
     },
 }
+
+-- Select tmux windows using the familiar Cmd+number shortcuts.
+for index = 1, 9 do
+    table.insert(config.keys, {
+        key = tostring(index),
+        mods = 'SUPER',
+        action = wezterm.action.SendString('\x02' .. tostring(index)),
+    })
+end
 
 -- fullscreen
 config.native_macos_fullscreen_mode = true

@@ -14,6 +14,11 @@
         source = ./config/wezterm/.wezterm.lua;
     };
 
+    # tmux (the binary is installed through Homebrew)
+    home.file.".tmux.conf" = {
+        source = ./config/tmux/.tmux.conf;
+    };
+
     # zsh
     home.file.".zshrc" = {
         source = ./config/zsh/.zshrc;
