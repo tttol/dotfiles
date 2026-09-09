@@ -35,7 +35,7 @@ tmux windows. Existing WezTerm shells are not migrated into tmux.
 | Cmd+Shift+' | Split top/bottom |
 | Cmd+H/J/K/L | Focus pane |
 | Cmd+arrow | Resize pane |
-| Cmd+W | Close tmux pane after confirmation |
+| Cmd+W | Close tmux pane without confirmation |
 | Ctrl-b, then D | Detach without terminating the session |
 | Ctrl-b, then Ctrl-s | Save snapshot now |
 | Ctrl-b, then Ctrl-r | Restore latest snapshot manually |
@@ -44,6 +44,12 @@ Continuum saves every minute while an attached client updates the status
 line. Save manually before rebooting to include the latest changes. After
 rebooting, reopen WezTerm; continuum restores the snapshot on tmux server
 startup. This configuration does not launch WezTerm automatically at login.
+
+New WezTerm windows read `~/.tmux/resurrect/last` and use the active window's
+saved dimensions in session `main`, plus one row for tmux's status line.
+Without a valid saved size, they default to 120 columns by 28 rows.
+This restores terminal cell dimensions, not macOS window position or fullscreen
+state. Manual restoration inside an open WezTerm window does not resize it.
 
 The configuration adds Homebrew to tmux's server PATH before loading plugins.
 This is necessary when WezTerm starts from Finder or the Dock without the shell's

@@ -10,6 +10,37 @@ local config = wezterm.config_builder()
 config.default_prog = { '/opt/homebrew/bin/tmux', 'new-session', '-A', '-s', 'main' }
 config.initial_cols = 120
 config.initial_rows = 28
+
+-- Recover the active tmux window's cell dimensions before starting its client.
+local function saved_terminal_size(path)
+    local snapshot = io.open(path, 'r')
+    if not snapshot then
+        return
+    end
+
+    local cols, rows
+    for line in snapshot:lines() do
+        local session, active, layout = line:match(
+            '^window\t([^\t]*)\t[^\t]*\t[^\t]*\t([^\t]*)\t[^\t]*\t([^\t]*)'
+        )
+        if session == 'main' and active == '1' then
+            local width, height = layout:match('^%x+,(%d+)x(%d+),')
+            width, height = tonumber(width), tonumber(height)
+            if width and height and width > 0 and height > 0 then
+                cols, rows = width, height + 1 -- Include the tmux status line.
+                break
+            end
+        end
+    end
+    snapshot:close()
+    return cols, rows
+end
+
+local saved_cols, saved_rows = saved_terminal_size(wezterm.home_dir .. '/.tmux/resurrect/last')
+if saved_cols then
+    config.initial_cols = saved_cols
+    config.initial_rows = saved_rows
+end
 config.color_scheme = 'Tokyo Night'
 
 --- Open link by mouse click
