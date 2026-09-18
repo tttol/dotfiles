@@ -30,9 +30,6 @@
     };
 
     # claude
-    home.file.".claude/CLAUDE.md" = {
-        source = ./config/claude/CLAUDE.md;
-    };
     home.file.".claude/settings.json" = {
         source = ./config/claude/settings.json;
     };
@@ -50,14 +47,10 @@
     #     recursive = true;
     # };
     # Codex hooks
-    home.file.".codex/hooks" = {
-        source = ./config/codex/hooks;
+    home.file.".codex" = {
+        source = ./config/codex;
         recursive = true;
     };
-    home.file.".codex/hooks.json" = {
-        source = ./config/codex/hooks.json;
-    };
-
     # lazygit
     home.file."Library/Application Support/lazygit" = {
         source = ./config/lazygit;
