@@ -6,41 +6,8 @@ local config = wezterm.config_builder()
 ------------------------------------
 --- GENERAL
 ------------------------------------
--- Attach every new WezTerm window to the same persistent tmux session.
-config.default_prog = { '/opt/homebrew/bin/tmux', 'new-session', '-A', '-s', 'main' }
 config.initial_cols = 120
 config.initial_rows = 28
-
--- Recover the active tmux window's cell dimensions before starting its client.
-local function saved_terminal_size(path)
-    local snapshot = io.open(path, 'r')
-    if not snapshot then
-        return
-    end
-
-    local cols, rows
-    for line in snapshot:lines() do
-        local session, active, layout = line:match(
-            '^window\t([^\t]*)\t[^\t]*\t[^\t]*\t([^\t]*)\t[^\t]*\t([^\t]*)'
-        )
-        if session == 'main' and active == '1' then
-            local width, height = layout:match('^%x+,(%d+)x(%d+),')
-            width, height = tonumber(width), tonumber(height)
-            if width and height and width > 0 and height > 0 then
-                cols, rows = width, height + 1 -- Include the tmux status line.
-                break
-            end
-        end
-    end
-    snapshot:close()
-    return cols, rows
-end
-
-local saved_cols, saved_rows = saved_terminal_size(wezterm.home_dir .. '/.tmux/resurrect/last')
-if saved_cols then
-    config.initial_cols = saved_cols
-    config.initial_rows = saved_rows
-end
 config.color_scheme = 'Tokyo Night'
 
 --- Open link by mouse click
@@ -131,89 +98,77 @@ end)
 -- tab bar
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
-config.hide_tab_bar_if_only_one_tab = true
+config.hide_tab_bar_if_only_one_tab = false
 
 
 ------------------------------------
 --- WINDOW, PANE
 ------------------------------------
 config.keys = {
-    -- Cmd+T creates a tmux window in the attached session.
-    -- Send Ctrl+B (\x02), followed by c, to invoke tmux's new-window binding.
-    { key = 't', mods = 'SUPER', action = wezterm.action.SendString '\x02c' },
     -- Horizontal split (split into top and bottom)
     {
         key = '\'',
         mods = 'SUPER|SHIFT',
-        action = wezterm.action.SendString '\x02"',
+        action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
     },
     -- Vertical split (split into left and right)
     {
         key = '\'',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02%',
+        action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
     },
 
     -- move to other pane
     {
         key = 'h',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:select-pane -L\r',
+        action = wezterm.action.ActivatePaneDirection 'Left',
     },
     {
         key = 'l',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:select-pane -R\r',
+        action = wezterm.action.ActivatePaneDirection 'Right',
     },
     {
         key = 'k',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:select-pane -U\r',
+        action = wezterm.action.ActivatePaneDirection 'Up',
     },
     {
         key = 'j',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:select-pane -D\r',
+        action = wezterm.action.ActivatePaneDirection 'Down',
     },
 
     -- close pane
     {
         key = 'w',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02x',
+        action = wezterm.action.CloseCurrentPane { confirm = true },
     },
 
     -- pane size
     {
         key = 'LeftArrow',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:resize-pane -L 5\r',
+        action = wezterm.action.AdjustPaneSize { 'Left', 5 },
     },
     {
         key = 'RightArrow',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:resize-pane -R 5\r',
+        action = wezterm.action.AdjustPaneSize { 'Right', 5 },
     },
     {
         key = 'UpArrow',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:resize-pane -U 5\r',
+        action = wezterm.action.AdjustPaneSize { 'Up', 5 },
     },
     {
         key = 'DownArrow',
         mods = 'SUPER',
-        action = wezterm.action.SendString '\x02:resize-pane -D 5\r',
+        action = wezterm.action.AdjustPaneSize { 'Down', 5 },
     },
 }
-
--- Select tmux windows using the familiar Cmd+number shortcuts.
-for index = 1, 9 do
-    table.insert(config.keys, {
-        key = tostring(index),
-        mods = 'SUPER',
-        action = wezterm.action.SendString('\x02' .. tostring(index)),
-    })
-end
 
 -- fullscreen
 config.native_macos_fullscreen_mode = true
