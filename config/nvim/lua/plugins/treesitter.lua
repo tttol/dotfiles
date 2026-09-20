@@ -10,6 +10,9 @@ return {
             "html",
             "html_tag",
             "superhtml",
+            -- Shared queries provide JavaScript keywords and JSX highlighting in TSX.
+            "ecma",
+            "jsx",
             "typescript",
             "tsx",
             "javascript",
