@@ -1,6 +1,6 @@
 return {
-    "neovim-treesitter/nvim-treesitter",
-    dependencies = { "neovim-treesitter/treesitter-parser-registry" },
+    "nvim-treesitter/nvim-treesitter",
+    branch = 'main',
     lazy = false,
     build = ":TSUpdate",
     config = function()
@@ -8,7 +8,7 @@ return {
             "markdown",
             "markdown_inline",
             "html",
-            "html_tag",
+            "html_tags",
             "superhtml",
             -- Shared queries provide JavaScript keywords and JSX highlighting in TSX.
             "ecma",
