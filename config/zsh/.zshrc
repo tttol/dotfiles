@@ -21,6 +21,7 @@ alias ll='eza --icons -al'
 alias lg='lazygit'
 # alias history='eval "$(fc -l -n 1  | fzf)"'
 alias ncodex="nix run github:tttol/nix-codex --refresh"
+alias wzr='wezurrection'
 
 ########################################################
 # COMPLETION
