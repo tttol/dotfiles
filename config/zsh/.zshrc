@@ -49,12 +49,14 @@ zinit light zsh-users/zsh-autosuggestions
 ########################################################
 # FUZZY FIND
 ########################################################
-# Select a local workspace directory; resolve the GitHub user from argument, GHR_USER, or tttol.
+# Select a directory under GHR_DIR (default: ~/Documents/workspace).
+# Resolve the GitHub user from argument, GHR_USER, or tttol.
 ghr() {
     local github_user="${1:-${GHR_USER:-tttol}}"
+    local repo_dir="${GHR_DIR:-$HOME/Documents/workspace}"
     local -a repos
     local repo
-    repos=("$HOME"/Documents/workspace/*(N/:t))
+    repos=("$repo_dir"/*(N/:t))
     (( ${#repos} )) || return 0
 
     repo=$(print -rl -- "${repos[@]}" | fzf --no-multi --prompt='GitHub repo> ') || return 0
