@@ -4,6 +4,13 @@ return {
     lazy = false,
     build = ":TSUpdate",
     config = function()
+        vim.filetype.add({
+            extension = {
+                tf = "terraform",
+                tfvars = "terraform-vars",
+            },
+        })
+        vim.treesitter.language.register("hcl", { "terraform", "terraform-vars" })
         local parsers = {
             "markdown",
             "markdown_inline",
@@ -27,6 +34,7 @@ return {
             "toml",
             "json",
             "rust",
+            "hcl",
         }
         local filetypes = {
             "markdown",
@@ -46,6 +54,9 @@ return {
             "toml",
             "json",
             "rust",
+            "terraform",
+            "terraform-vars",
+            "hcl",
         }
         -- nvim-treesitter manages parser and query installation.
         -- tree-sitter CLI builds parser binaries during installation.
