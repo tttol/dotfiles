@@ -17,6 +17,7 @@ return {
             "html",
             "html_tags",
             "superhtml",
+            "vue",
             -- Shared queries provide JavaScript keywords and JSX highlighting in TSX.
             "ecma",
             "jsx",
@@ -40,6 +41,7 @@ return {
             "markdown",
             "mdx",
             "html",
+            "vue",
             "typescript",
             "typescriptreact",
             "javascript",
