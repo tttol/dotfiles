@@ -1,6 +1,6 @@
 ---
 name: tttol-coding-standard
-description: Apply tttol's software architecture and coding standards, including SOLID principles such as the Open–Closed and Dependency Inversion Principles, when implementing, refactoring, or reviewing code written in any programming language. Read the matching language guide in this skill for language-specific rules.
+description: Apply tttol's software architecture and coding standards, including SOLID principles such as the Open–Closed and Dependency Inversion Principles, when implementing, refactoring, or reviewing code written in any programming language or GitHub Actions YAML files. Read the matching language guide in this skill for language-specific rules.
 ---
 
 # tttol's Coding Standard
@@ -13,6 +13,7 @@ Apply this skill when designing software, changing production code, reviewing a 
 - Implementing, refactoring, or reviewing source code written in any programming language
 - Designing public APIs, domain models, infrastructure boundaries, or dependency injection
 - Writing or reviewing tests that should follow the Given–When–Then pattern
+- Creating, modifying, or reviewing GitHub Actions workflows or composite actions
 
 ## 2. Select the language guide
 
@@ -688,6 +689,29 @@ static String maskEmail(String email) {
     return email.charAt(0) + "***" + email.substring(separator);
 }
 ```
+
+### 7.2.1. GitHub Actions dependency pinning
+
+Reduce supply chain risk from mutable tags and branches by pinning GitHub Actions dependencies:
+
+- In workflow YAML files (`.github/workflows/*.yml` and `*.yaml`) and composite action definitions, pin every remote repository-based `uses:` reference to a full 40-character commit SHA. This includes official GitHub actions, third-party actions, and remote reusable workflows. Do not use version tags (such as `@v7` or `@v7.0.0`), branches (such as `@main`), or abbreviated SHAs.
+- Resolve the intended release from the dependency's official upstream repository and verify that the full SHA belongs to that repository and release. Never invent a SHA or use an unverified hash. Preserve the existing dependency version when replacing a tag with its SHA unless an upgrade is explicitly requested.
+- Keep the corresponding release version in an inline comment, such as `# v7.0.0`, and update the SHA and comment together when changing versions.
+- Keep local references such as `uses: ./.github/actions/example` or `uses: ./.github/workflows/example.yml` in their local-path form; they do not accept an `@SHA` suffix.
+
+**BAD**
+
+```yaml
+- uses: actions/checkout@v4.2.2
+```
+
+**GOOD**
+
+```yaml
+- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+```
+
+The version above illustrates pinning syntax; select the appropriate release for the task. See [GitHub's guidance on using third-party actions](https://docs.github.com/en/actions/reference/security/secure-use#using-third-party-actions).
 
 ### 7.3. Input validation
 
