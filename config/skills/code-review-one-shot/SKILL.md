@@ -46,7 +46,7 @@ detail comment
 detail comment
 ```
 
-Save this result file to {repository root directory}/docs/reviews/. If nothing, create a new directory.
+Save this result file to {repository root directory}/.cache/reviews/. If nothing, create a new directory.
 
 ## Guideline
 Review the code according to `tttol-coding-standard` skills. 
