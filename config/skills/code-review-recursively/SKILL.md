@@ -9,7 +9,7 @@ Resolve severe findings on the current pull request through repeated review and 
 
 ## Workflow
 
-1. Create a Codex goal for the full recursive review task before making changes. The goal is always: `Continue reviewing, fixing, committing, and pushing the current PR until the latest docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md report has zero CRITICAL and zero HIGH findings. Verify each severe finding before editing, make the smallest coherent fix, run focused checks, commit the fix, push the branch, and re-review. Preserve unrelated user changes, never force-push, and if blocked, report the blocker, evidence gathered, remaining severe findings, and the input needed to continue`. Do not set a token budget unless the user explicitly requested one.
+1. Create a Codex goal for the full recursive review task before making changes. The goal is always: `Continue reviewing, fixing, committing, and pushing the current PR until the latest .cache/reviews/codereview_PR<PR number>_<yyyyMMdd>.md report has zero CRITICAL and zero HIGH findings. Verify each severe finding before editing, make the smallest coherent fix, run focused checks, commit the fix, push the branch, and re-review. Preserve unrelated user changes, never force-push, and if blocked, report the blocker, evidence gathered, remaining severe findings, and the input needed to continue`. Do not set a token budget unless the user explicitly requested one.
 2. Read the repository's `AGENTS.md`, `CLAUDE.md`, and relevant local instructions.
 3. Inspect `git status --short --branch` and record pre-existing changes. Never discard, overwrite, stage, or commit unrelated user changes.
 4. Run `gh pr view --json number,title,url,headRefName,baseRefName` to identify the pull request for the current branch.
@@ -27,7 +27,7 @@ Resolve severe findings on the current pull request through repeated review and 
 ## Review And Repair Cycle
 
 1. Invoke the `code-review` skill for the current PR.
-2. Locate its report at `docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md`.
+2. Locate its report at `.cache/reviews/codereview_PR<PR number>_<yyyyMMdd>.md`.
 3. Confirm that the report contains all four severity sections: `CRITICAL`, `HIGH`, `MEDIUM`, and `LOW`. Treat a missing or malformed section as an invalid review, not as zero findings.
 4. Count actual review comments under `CRITICAL` and `HIGH`. Ignore headings, explanatory placeholder text, and empty sections.
 5. Finish when both severe sections contain zero findings. MEDIUM and LOW findings do not block completion.
@@ -51,7 +51,7 @@ Resolve severe findings on the current pull request through repeated review and 
 - Include tests and their corresponding production changes in the same commit.
 - Do not create an empty commit when a review has no CRITICAL or HIGH findings.
 - Do not stage an entire dirty worktree with `git add .` or `git add -A`.
-- Do not stage any `docs/reviews/codereview_PR<PR number>_<yyyyMMdd>.md` file.
+- Do not stage any `.cache/reviews/codereview_PR<PR number>_<yyyyMMdd>.md` file.
 
 ## Stop Conditions
 
